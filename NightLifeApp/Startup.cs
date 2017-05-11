@@ -29,7 +29,7 @@ namespace NightLifeApp
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-            }
+            }            
 
             app.UseMvc(config =>
             {
