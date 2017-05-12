@@ -1,1 +1,37 @@
-﻿<h1>AYY LMAO</h1>
+﻿@using System.Collections.Generic
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Authentication
+@inject SignInManager<NightLifeUser> SignInManager
+
+<div id="fb-root"></div>
+
+
+
+<h1>AYY LMAO</h1>
+
+<a href="/api/search/test">Click Me</a>
+
+<a asp-controller="Auth" asp-action="Logout">Logout</a>
+
+@{
+    var loginProviders = SignInManager.GetExternalAuthenticationSchemes().ToList();
+} 
+
+<form asp-controller="Auth" asp-action="ExternalLogin" method="post">
+
+    @foreach(var provider in loginProviders)
+    {
+        <button type="submit" class="btn btn-success" name="provider" value="@provider.AuthenticationScheme" title="Login with @provider.DisplayName">@provider.AuthenticationScheme</button>
+    }
+
+</form>
+
+<div>
+    Signed In: @User.Identity.IsAuthenticated
+</div>
+
+
+
+<!--<div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="false" data-auto-logout-link="true" data-use-continue-as="true"></div>-->
+
+<!--<script src="~/js/facebookButton.js"></script>-->
