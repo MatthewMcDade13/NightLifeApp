@@ -1,0 +1,106 @@
+﻿using Microsoft.AspNetCore.Http.Authentication;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using NightLifeApp.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace NightLifeApp.Controllers.Web
+{
+    public class AuthController : Controller
+    {
+        private UserManager<NightLifeUser> userManager;
+        private SignInManager<NightLifeUser> signInManager;
+
+        public AuthController(UserManager<NightLifeUser> userManager, SignInManager<NightLifeUser> signInManager)
+        {
+            this.userManager = userManager;
+            this.signInManager = signInManager;
+        }
+
+
+        public async Task<IActionResult> Logout()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                await signInManager.SignOutAsync();
+            }
+
+            //return RedirectToAction(nameof(HomeController.Index), "Home");
+            return Json(new { LoggedIn = User.Identity.IsAuthenticated });
+        }
+
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ExternalLogin(string provider, string returnUrl = null)
+        {
+            string redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Auth", new { ReturnUrl = returnUrl });
+            AuthenticationProperties props = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            return Challenge(props, provider);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
+        {
+            if (remoteError != null)
+            {
+                throw new Exception($"Error from external provider: {remoteError}");
+            }
+
+            ExternalLoginInfo info = await signInManager.GetExternalLoginInfoAsync();
+
+            if (info == null)
+            {
+                throw new Exception($"External Login Info returned null.");
+            }
+
+            var signInResult = await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false);
+
+            if (signInResult.Succeeded)
+            {
+                return RedirectToLocal(returnUrl);
+            }
+            else
+            {
+                //Create the user and log them in
+                NightLifeUser user = new NightLifeUser
+                {
+                    UserName = info.Principal.FindFirstValue(ClaimTypes.Name),
+                    Email = info.Principal.FindFirstValue(ClaimTypes.Email)
+                };
+
+                IdentityResult result = await userManager.CreateAsync(user);
+
+                if (result.Succeeded)
+                {
+                    result = await userManager.AddLoginAsync(user, info);
+
+                    if (result.Succeeded)
+                    {
+                        await signInManager.SignInAsync(user, false);
+                        return RedirectToLocal(returnUrl);
+                    }
+                }
+
+                throw new Exception($"User was not created: {result.Errors.ToArray()[0].Description}");
+            }
+        }
+
+        private IActionResult RedirectToLocal(string returnUrl)
+        {
+            if (Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+
+            return RedirectToAction(nameof(HomeController.Index), "Home");
+        }
+    }
+}
