@@ -13,6 +13,7 @@ using Newtonsoft.Json.Serialization;
 using NightLifeApp.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using NightLifeApp.Services;
 
 namespace NightLifeApp
 {
@@ -44,10 +45,13 @@ namespace NightLifeApp
         {
             services.AddSingleton(Configuration);
 
+            services.AddScoped<IApiParser, ApiParser>();
+
             services.AddDbContext<NightLifeContext>();
 
             services.AddIdentity<NightLifeUser, IdentityRole>(options =>
             {
+                options.User.RequireUniqueEmail = true;
                 options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&'*+-/=?^_`{|}~.@ ";
             })
                 .AddEntityFrameworkStores<NightLifeContext>();
@@ -77,12 +81,20 @@ namespace NightLifeApp
 
             });
 
-            //Havent got the Keys for Twitter just yet
+            app.UseGoogleAuthentication(new GoogleOptions()
+            {
+                ClientId = Configuration["Authentication:Google:ClientId"],
+                ClientSecret = Configuration["Authentication:Google:ClientSecret"],
+                AutomaticAuthenticate = true,
+                AutomaticChallenge = true
+            });
 
             //app.UseTwitterAuthentication(new TwitterOptions()
             //{
             //    ConsumerKey = Configuration["Authentication:Twitter:ConsumerKey"],
-            //    ConsumerSecret = Configuration["Authentication:Twitter:ConsumerSecret"]
+            //    ConsumerSecret = Configuration["Authentication:Twitter:ConsumerSecret"],
+            //    AutomaticChallenge = true,
+            //    AutomaticAuthenticate = true
             //});
 
             if (env.IsDevelopment())

@@ -8,9 +8,10 @@ using NightLifeApp.Models;
 namespace NightLifeApp.Migrations
 {
     [DbContext(typeof(NightLifeContext))]
-    partial class NightLifeContextModelSnapshot : ModelSnapshot
+    [Migration("20170513040515_AddedCollectionOfUsersToBarModel")]
+    partial class AddedCollectionOfUsersToBarModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")

@@ -34,8 +34,10 @@ namespace NightLifeApp.Controllers.Web
             return Json(new { LoggedIn = User.Identity.IsAuthenticated });
         }
 
-
-
+        public IActionResult ConfirmLoginSocial()
+        {
+            return View();
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -72,8 +74,9 @@ namespace NightLifeApp.Controllers.Web
                 //Create the user and log them in
                 NightLifeUser user = new NightLifeUser
                 {
-                    UserName = info.Principal.FindFirstValue(ClaimTypes.Name),
-                    Email = info.Principal.FindFirstValue(ClaimTypes.Email)
+                    UserName = info.Principal.FindFirstValue(ClaimTypes.Email),
+                    Email = info.Principal.FindFirstValue(ClaimTypes.Email),
+                    Name = info.Principal.FindFirstValue(ClaimTypes.Name)
                 };
 
                 IdentityResult result = await userManager.CreateAsync(user);
@@ -89,7 +92,8 @@ namespace NightLifeApp.Controllers.Web
                     }
                 }
 
-                throw new Exception($"User was not created: {result.Errors.ToArray()[0].Description}");
+                //If we have gotten this far, the user has logged in with a different social media account.
+                return RedirectToAction(nameof(AuthController.ConfirmLoginSocial), "Auth");
             }
         }
 

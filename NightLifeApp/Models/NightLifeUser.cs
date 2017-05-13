@@ -9,6 +9,6 @@ namespace NightLifeApp.Models
 {
     public class NightLifeUser : IdentityUser
     {
-        public ICollection<Bar> BarsAttending { get; set; }
+        public string Name { get; set; }
     }
 }

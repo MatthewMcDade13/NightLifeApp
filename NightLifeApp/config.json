@@ -1,6 +1,7 @@
 ﻿{
   "Data": {
     "GooglePlacesKey": "AIzaSyB_xaVpauFQOUXzfe_5OHU8w1UtOeYtsrQ",
+    "GoogleGeoKey": "AIzaSyCcDsbGxUZoVhwqzrMulBefRUYIUl_DxiE",
     "ConnectionString": "Server=(localdb)\\MSSQLLocalDB;Database=NighLifeDb;MultipleActiveResultSets=true;"
   }
 }

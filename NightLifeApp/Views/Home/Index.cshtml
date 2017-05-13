@@ -1,6 +1,4 @@
-﻿@using System.Collections.Generic
-@using Microsoft.AspNetCore.Http
-@using Microsoft.AspNetCore.Authentication
+﻿
 @inject SignInManager<NightLifeUser> SignInManager
 
 <div id="fb-root"></div>
@@ -21,13 +19,33 @@
 
     @foreach(var provider in loginProviders)
     {
-        <button type="submit" class="btn btn-success" name="provider" value="@provider.AuthenticationScheme" title="Login with @provider.DisplayName">@provider.AuthenticationScheme</button>
+        <button type="submit" class="btn btn-success" name="provider" value="@provider.AuthenticationScheme" title="Login with @provider.DisplayName">Login with @provider.AuthenticationScheme</button>
     }
 
 </form>
 
 <div>
     Signed In: @User.Identity.IsAuthenticated
+</div>
+<br />
+<br />
+
+<div ng-controller="HomeController as home" ng-cloak>
+    
+    <form ng-submit="home.getBars()">
+        <input type="text" name="Location" value="Enter Location Here" ng-model="home.location" required/>
+        <input type="submit" cast="search"/>
+    </form>
+
+    <div>
+        <h1>{{home.bars.length === 0 ? "No Search Results for " + home.location : null}}</h1>
+        <div ng-repeat="bar in home.bars">
+            <h3>{{bar.name}}</h3>
+            <p>{{bar.address}}</p>
+            <p>Rating: {{bar.rating === 0 ? "Rating Not Available" : bar.rating}}</p>
+            <img ng-src="/api/search/photo/{{bar.photoReference}}" alt="Photo for this location is not available" />
+        </div>
+    </div>
 </div>
 
 

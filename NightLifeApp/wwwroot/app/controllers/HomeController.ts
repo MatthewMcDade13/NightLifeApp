@@ -2,11 +2,22 @@
 {
     export class HomeController
     {
-        
-
-        constructor()
-        {
+        bars: any;
+        location: string;
             
+        static $inject = ["$http"];
+
+        constructor(public $http: angular.IHttpService)
+        {
+            this.location = "";
+        }
+
+        getBars()
+        {
+            this.$http.get(`api/search/nearby?location=${this.location}`)
+                .then(response => {
+                    this.bars = response.data;
+                });
         }
     }
 

@@ -8,6 +8,9 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Net.Http;
 using Microsoft.Extensions.Configuration;
+using NightLifeApp.ViewModels;
+using NightLifeApp.Models;
+using NightLifeApp.Services;
 
 namespace NightLifeApp.Controllers.Api
 {
@@ -15,35 +18,55 @@ namespace NightLifeApp.Controllers.Api
     public class SearchController : Controller
     {
         private readonly string googlePlacesKey;
+        private readonly string googleGeoKey;
         private IConfiguration config;
+        private IApiParser parser;
 
-        public SearchController(IConfiguration config)
+        public SearchController(IConfiguration config, IApiParser parser)
         {
-            googlePlacesKey = config["Data:GooglePlacesKey"];
+            this.parser = parser;
+
             this.config = config;
+            googlePlacesKey = config["Data:GooglePlacesKey"];
+            googleGeoKey = config["Data:GoogleGeoKey"];
         }
 
-        //GET api/search/nearby/?lat=54.6&long=89.4
+        //GET api/search/nearby?location=city
         [HttpGet("nearby")]
         public async Task<IActionResult> FindNearbyBars()
         {
-            float latitude = 0.0f;
-            float longitude = 0.0f;
+            string location = Request.Query["location"];
 
-            try
+            Coordinate coords = await GetCoords(location);
+
+            //If coords Obj is null, the search did turn up anything, so return an empty Array.
+            if (coords == null)
             {
-                latitude = float.Parse(Request.Query["lat"]);
-                longitude = float.Parse(Request.Query["long"]);
-            }
-            catch (FormatException)
-            {
-                return Json(new { Error = "Lat or Long was not a number. Please use numbers for Lat and Long" });
+                return Json(Array.Empty<BarViewModel>());
             }
 
             using (HttpClient client = new HttpClient())
             {
                 using (HttpResponseMessage response =
-                    await client.GetAsync($"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={latitude},{longitude}&radius=5000&type=bar&key={googlePlacesKey}"))
+                    await client.GetAsync($"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={coords.Latitude},{coords.Longitude}&radius=5000&type=bar&key={googlePlacesKey}"))
+                {
+                    response.EnsureSuccessStatusCode();
+
+                    string jsonString = await response.Content.ReadAsStringAsync();
+
+                    List<BarViewModel> bars = parser.ParseGooglePlacesApiResponse(jsonString);
+
+                    return Json(bars);
+                }
+            }
+        }
+
+        private async Task<Coordinate> GetCoords(string location)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                using (HttpResponseMessage response =
+                    await client.GetAsync($"https://maps.googleapis.com/maps/api/geocode/json?address={location}&key={googleGeoKey}"))
                 {
                     response.EnsureSuccessStatusCode();
 
@@ -51,34 +74,36 @@ namespace NightLifeApp.Controllers.Api
 
                     dynamic json = JsonConvert.DeserializeObject(jsonString);
 
-                    //For Testing Only, will have to make a service to return all Json Object we will need
-                    JObject obj = new JObject(
-                        new JProperty("name", json.results[0].name),                        
-                        new JProperty("vicinity", json.results[0].vicinity),
-                        new JProperty("rating", json.results[0].rating),
-                        new JProperty("photoReference", json.results[0].photos[0].photo_reference)
-                        );
-                        
+                    if (json.results.Count == 0)
+                    {
+                        return null;
+                    }
 
-                    return Json(obj);
+                    Coordinate coords = new Coordinate()
+                    {
+                        Latitude = json.results[0].geometry.location.lat,
+                        Longitude = json.results[0].geometry.location.lng
+                    };
+
+                    return coords;
                 }
             }
         }
 
-        private IActionResult GetBarPhoto()
+        [HttpGet("photo/{photoReference}")]
+        public async Task<IActionResult> GetBarPhoto(string photoReference)
         {
-            return Json(new { Placeholder = true });
-        }
+            using (HttpClient client = new HttpClient())
+            {
+                using (HttpResponseMessage response = await client.GetAsync($"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={photoReference}&key={googlePlacesKey}"))
+                {
+                    response.EnsureSuccessStatusCode();
 
-        [HttpGet("test")]
-        public IActionResult Test()
-        {
+                    Byte[] bytes = await response.Content.ReadAsByteArrayAsync();
 
-
-            var authTest = User.Identity.IsAuthenticated;
-            var nameTest = User.Identity.Name;
-
-            return Json(new { IsAuthenticated = authTest, UserName = nameTest });
+                    return File(bytes, "image/jpg");
+                }
+            }
         }
     }
 }

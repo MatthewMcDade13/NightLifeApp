@@ -12,6 +12,7 @@ namespace NightLifeApp.Models
         public string Name { get; set; }
         public string ImgUrl { get; set; }
         public string BarUrl { get; set; }
+        public ICollection<NightLifeUser> PeopleAttending { get; set; }
         public int NumberOfPeopleAttending { get; set; }
         public float Rating { get; set; }
     }

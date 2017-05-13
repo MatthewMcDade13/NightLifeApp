@@ -8,9 +8,10 @@ using NightLifeApp.Models;
 namespace NightLifeApp.Migrations
 {
     [DbContext(typeof(NightLifeContext))]
-    partial class NightLifeContextModelSnapshot : ModelSnapshot
+    [Migration("20170513030934_AddedNamePropToUserModel")]
+    partial class AddedNamePropToUserModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -134,11 +135,15 @@ namespace NightLifeApp.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<string>("NightLifeUserId");
+
                     b.Property<int>("NumberOfPeopleAttending");
 
                     b.Property<float>("Rating");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("NightLifeUserId");
 
                     b.ToTable("Bars");
                 });
@@ -149,8 +154,6 @@ namespace NightLifeApp.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("AccessFailedCount");
-
-                    b.Property<int?>("BarId");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
@@ -186,8 +189,6 @@ namespace NightLifeApp.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BarId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -236,11 +237,11 @@ namespace NightLifeApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("NightLifeApp.Models.NightLifeUser", b =>
+            modelBuilder.Entity("NightLifeApp.Models.Bar", b =>
                 {
-                    b.HasOne("NightLifeApp.Models.Bar")
-                        .WithMany("PeopleAttending")
-                        .HasForeignKey("BarId");
+                    b.HasOne("NightLifeApp.Models.NightLifeUser")
+                        .WithMany("BarsAttending")
+                        .HasForeignKey("NightLifeUserId");
                 });
         }
     }

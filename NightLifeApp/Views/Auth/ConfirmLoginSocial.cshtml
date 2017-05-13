@@ -1,0 +1,16 @@
+﻿@inject SignInManager<NightLifeUser> SignInManager
+
+<h1>The email provided is already in use. You may already have an account. Try logging in with a different provider.</h1>
+
+@{
+    var loginProviders = SignInManager.GetExternalAuthenticationSchemes().ToList();
+}
+
+<form asp-controller="Auth" asp-action="ExternalLogin" method="post">
+
+    @foreach (var provider in loginProviders)
+    {
+        <button type="submit" class="btn btn-success" name="provider" value="@provider.AuthenticationScheme" title="Login with @provider.DisplayName">Login with @provider.AuthenticationScheme</button>
+    }
+
+</form>
