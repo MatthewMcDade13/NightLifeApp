@@ -8,9 +8,10 @@ using NightLifeApp.Models;
 namespace NightLifeApp.Migrations
 {
     [DbContext(typeof(NightLifeContext))]
-    partial class NightLifeContextModelSnapshot : ModelSnapshot
+    [Migration("20170513225132_ChangedImgUrlToPhotoReferenceOnBarModel")]
+    partial class ChangedImgUrlToPhotoReferenceOnBarModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -128,8 +129,6 @@ namespace NightLifeApp.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Address");
-
                     b.Property<string>("Name");
 
                     b.Property<int>("NumberOfPeopleAttending");
@@ -161,8 +160,6 @@ namespace NightLifeApp.Migrations
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
-
-                    b.Property<string>("FacebookId");
 
                     b.Property<bool>("LockoutEnabled");
 

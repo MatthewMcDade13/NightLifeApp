@@ -1,4 +1,5 @@
-﻿using NightLifeApp.ViewModels;
+﻿using NightLifeApp.Models;
+using NightLifeApp.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace NightLifeApp.Services
 {
     public interface IApiParser
     {
-        List<BarViewModel> ParseGooglePlacesApiResponse(string jsonResponse);
+        List<Bar> ParseGooglePlacesApiResponse(string jsonResponse);
     }
 }

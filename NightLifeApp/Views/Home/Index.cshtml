@@ -31,17 +31,22 @@
 <br />
 
 <div ng-controller="HomeController as home" ng-cloak>
+
+    <div ng-init="home.getLastSearch()"></div>
     
     <form ng-submit="home.getBars()">
         <input type="text" name="Location" value="Enter Location Here" ng-model="home.location" required/>
         <input type="submit" cast="search"/>
     </form>
-
+    <a ng-click="home.test()">Click me</a>
     <div>
         <h1>{{home.bars.length === 0 ? "No Search Results for " + home.location : null}}</h1>
         <div ng-repeat="bar in home.bars">
+            <a ng-click="home.subscribeToBar(bar)" class="btn btn-primary">Im Going!</a>
             <h3>{{bar.name}}</h3>
             <p>{{bar.address}}</p>
+            <p>Number of people attending: {{bar.numberOfPeopleAttending}}</p>
+            <p>Place Id: {{bar.placeId}}</p>
             <p>Rating: {{bar.rating === 0 ? "Rating Not Available" : bar.rating}}</p>
             <img ng-src="/api/search/photo/{{bar.photoReference}}" alt="Photo for this location is not available" />
         </div>

@@ -10,5 +10,6 @@ namespace NightLifeApp.Models
     public class NightLifeUser : IdentityUser
     {
         public string Name { get; set; }
+        public string FacebookId { get; set; }
     }
 }

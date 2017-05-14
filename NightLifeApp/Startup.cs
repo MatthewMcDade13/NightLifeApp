@@ -14,6 +14,7 @@ using NightLifeApp.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using NightLifeApp.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace NightLifeApp
 {
@@ -45,14 +46,40 @@ namespace NightLifeApp
         {
             services.AddSingleton(Configuration);
 
+            services.AddDistributedMemoryCache();
+
+            services.AddSession();
+
             services.AddScoped<IApiParser, ApiParser>();
+
+            services.AddScoped<IHttpService, HttpService>();
+
+            services.AddScoped<INightLifeRepository, NightLifeRepository>();
 
             services.AddDbContext<NightLifeContext>();
 
-            services.AddIdentity<NightLifeUser, IdentityRole>(options =>
+            services.AddIdentity<NightLifeUser, IdentityRole>(config =>
             {
-                options.User.RequireUniqueEmail = true;
-                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&'*+-/=?^_`{|}~.@ ";
+                config.User.RequireUniqueEmail = true;
+                config.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&'*+-/=?^_`{|}~.@ ";
+                config.Cookies.ApplicationCookie.LoginPath = "/Auth/Login";
+                config.Cookies.ApplicationCookie.Events = new CookieAuthenticationEvents()
+                {
+                    OnRedirectToLogin = async context =>
+                    {
+                        if (context.Request.Path.StartsWithSegments("/api") &&
+                            context.Response.StatusCode == 200)
+                        {
+                            context.Response.StatusCode = 401;
+                        }
+                        else
+                        {
+                            context.Response.Redirect(context.RedirectUri);
+                        }
+
+                        await Task.Yield();
+                    }
+                };
             })
                 .AddEntityFrameworkStores<NightLifeContext>();
 
@@ -68,6 +95,8 @@ namespace NightLifeApp
             loggerFactory.AddConsole();
 
             app.UseStaticFiles();
+
+            app.UseSession();
 
             app.UseIdentity();
 
@@ -88,14 +117,6 @@ namespace NightLifeApp
                 AutomaticAuthenticate = true,
                 AutomaticChallenge = true
             });
-
-            //app.UseTwitterAuthentication(new TwitterOptions()
-            //{
-            //    ConsumerKey = Configuration["Authentication:Twitter:ConsumerKey"],
-            //    ConsumerSecret = Configuration["Authentication:Twitter:ConsumerSecret"],
-            //    AutomaticChallenge = true,
-            //    AutomaticAuthenticate = true
-            //});
 
             if (env.IsDevelopment())
             {

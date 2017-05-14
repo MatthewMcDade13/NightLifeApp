@@ -8,17 +8,19 @@ using Newtonsoft.Json;
 using System.Net.Http;
 using System.IO;
 using Microsoft.AspNetCore.Mvc;
+using NightLifeApp.Models;
 
 namespace NightLifeApp.Services
 {
     public class ApiParser : IApiParser
     {
-        public List<BarViewModel> ParseGooglePlacesApiResponse(string jsonResponse)
+        public List<Bar> ParseGooglePlacesApiResponse(string jsonResponse)
         {
-            List<BarViewModel> bars = new List<BarViewModel>();
+            List<Bar> bars = new List<Bar>();
 
             string name = string.Empty;
-            string address = string.Empty;            
+            string address = string.Empty;
+            string placeId = string.Empty;
             string photoReference = string.Empty;
             float rating = 0.0f;
 
@@ -39,7 +41,11 @@ namespace NightLifeApp.Services
                 if (json.results[i].vicinity != null)
                 {
                     address = json.results[i].vicinity;
-                }                
+                }
+                if (json.results[i].place_id != null)
+                {
+                    placeId = json.results[i].place_id;
+                }
                 if (json.results[i].photos != null)
                 {
                     photoReference = json.results[i].photos[0].photo_reference;
@@ -49,10 +55,11 @@ namespace NightLifeApp.Services
                     rating = json.results[i].rating;
                 }
 
-                bars.Add(new BarViewModel()
+                bars.Add(new Bar()
                 {
                     Name = name,
-                    Address = address,                    
+                    Address = address,
+                    PlaceId = placeId,
                     PhotoReference = photoReference,
                     Rating = rating
                 });

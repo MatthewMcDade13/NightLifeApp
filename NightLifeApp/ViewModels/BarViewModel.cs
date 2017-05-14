@@ -9,7 +9,8 @@ namespace NightLifeApp.ViewModels
     public class BarViewModel
     {
         public string Name { get; set; }
-        public string PhotoReference { get; set; }        
+        public string PlaceId { get; set; }
+        public string PhotoReference { get; set; }       
         public string Address { get; set; }
         public float Rating { get; set; }
     }

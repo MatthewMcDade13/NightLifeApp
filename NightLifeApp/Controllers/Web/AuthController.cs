@@ -39,6 +39,11 @@ namespace NightLifeApp.Controllers.Web
             return View();
         }
 
+        public IActionResult Login()
+        {
+            return View();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult ExternalLogin(string provider, string returnUrl = null)
@@ -71,12 +76,20 @@ namespace NightLifeApp.Controllers.Web
             }
             else
             {
+                string facebookId = null;
+
+                if (info.LoginProvider == "Facebook")
+                {
+                    facebookId = info.ProviderKey;
+                }
+                
                 //Create the user and log them in
                 NightLifeUser user = new NightLifeUser
                 {
                     UserName = info.Principal.FindFirstValue(ClaimTypes.Email),
                     Email = info.Principal.FindFirstValue(ClaimTypes.Email),
-                    Name = info.Principal.FindFirstValue(ClaimTypes.Name)
+                    Name = info.Principal.FindFirstValue(ClaimTypes.Name),
+                    FacebookId = facebookId
                 };
 
                 IdentityResult result = await userManager.CreateAsync(user);

@@ -8,9 +8,10 @@ using NightLifeApp.Models;
 namespace NightLifeApp.Migrations
 {
     [DbContext(typeof(NightLifeContext))]
-    partial class NightLifeContextModelSnapshot : ModelSnapshot
+    [Migration("20170513230239_AddedAddressPropToBarModel")]
+    partial class AddedAddressPropToBarModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -161,8 +162,6 @@ namespace NightLifeApp.Migrations
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
-
-                    b.Property<string>("FacebookId");
 
                     b.Property<bool>("LockoutEnabled");
 
