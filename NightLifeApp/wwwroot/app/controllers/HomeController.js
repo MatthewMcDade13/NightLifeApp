@@ -48,14 +48,16 @@ var app;
             }
             HomeController.prototype.getBars = function () {
                 return __awaiter(this, void 0, void 0, function () {
-                    var _a;
-                    return __generator(this, function (_b) {
-                        switch (_b.label) {
-                            case 0:
-                                _a = this;
-                                return [4 /*yield*/, this.http.getBars(this.location)];
+                    var _this = this;
+                    var barResult;
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0: return [4 /*yield*/, this.http.getBars(this.location)];
                             case 1:
-                                _a.bars = _b.sent();
+                                barResult = _a.sent();
+                                this.$scope.$apply(function () {
+                                    _this.bars = barResult;
+                                });
                                 return [2 /*return*/];
                         }
                     });
@@ -119,19 +121,6 @@ var app;
                     modal.close.then(function (result) {
                         _this.message = "You said " + result;
                     });
-                });
-            };
-            //Using this to test bars until we can call Google Place Api again
-            HomeController.prototype.test = function () {
-                this.$http.put("api/bar/sub/" + 10, null)
-                    .then(function (response) {
-                    var jsonResponse = response.data;
-                    console.log(jsonResponse.redirectUrl);
-                    if (jsonResponse.redirectUrl) {
-                        console.log("redirecting");
-                        //this.$window.location.href = jsonResponse.redirectUrl;
-                        //return;
-                    }
                 });
             };
             return HomeController;

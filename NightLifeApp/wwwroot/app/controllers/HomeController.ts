@@ -26,11 +26,11 @@
 
         async getBars(): Promise<void>
         {
-            this.bars = await this.http.getBars(this.location);
-            //this.$http.get(`api/search/nearby?location=${this.location}`)
-            //    .then(response => {
-            //        this.bars = response.data;
-            //    });
+            let barResult: Array<Bar> = await this.http.getBars(this.location);
+
+            this.$scope.$apply(() => {
+                this.bars = barResult;
+            });
         }
 
         async getLastSearch(): Promise<void>
@@ -45,17 +45,7 @@
                 {
                     this.getBars();
                 }
-            });
-            //this.$http.get("api/search/last")
-            //    .then(response => {
-            //        let json: any = response.data;
-            //        this.location = json.lastSearch;
-
-            //        if (this.location !== null)
-            //        {
-            //            this.getBars();
-            //        }
-            //    });           
+            });       
         }
 
         async subscribeToBar(bar: Bar): Promise<void>
@@ -81,26 +71,6 @@
                     bar.numberOfPeopleAttending--;
                 }
             });
-
-            //this.$http.put(`api/bar/sub/${bar.id}`, null)
-            //    .then(response => {
-            //        let jsonResponse: any = response.data;
-
-            //        if (jsonResponse.redirectUrl)
-            //        {
-            //            this.$window.location.href = jsonResponse.redirectUrl;
-            //            return;
-            //        }
-
-            //        if (jsonResponse.subbed)
-            //        {
-            //            bar.numberOfPeopleAttending++;
-            //        }
-            //        else
-            //        {
-            //            bar.numberOfPeopleAttending--;
-            //        }
-            //    });
         }
 
         showModal(): void
@@ -118,22 +88,6 @@
                     this.message = "You said " + result;
                 });
             });
-        }
-
-        //Using this to test bars until we can call Google Place Api again
-        test()
-        {
-            this.$http.put(`api/bar/sub/${10}`, null)
-                .then(response => {
-                    let jsonResponse: any = response.data;
-
-                    console.log(jsonResponse.redirectUrl);
-                    if (jsonResponse.redirectUrl) {
-                        console.log("redirecting");
-                        //this.$window.location.href = jsonResponse.redirectUrl;
-                        //return;
-                    }
-                });
         }
     }
 
