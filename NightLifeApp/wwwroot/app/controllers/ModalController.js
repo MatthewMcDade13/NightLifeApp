@@ -3,10 +3,15 @@ var app;
     var controllers;
     (function (controllers) {
         var ModalController = (function () {
-            function ModalController() {
+            function ModalController(close) {
+                this.close = close;
             }
+            ModalController.prototype.closeModal = function (result) {
+                this.close(result, 500);
+            };
             return ModalController;
         }());
+        ModalController.$inject = ["close"];
         controllers.ModalController = ModalController;
         angular.module("NightLife").controller("ModalController", ModalController);
     })(controllers = app.controllers || (app.controllers = {}));

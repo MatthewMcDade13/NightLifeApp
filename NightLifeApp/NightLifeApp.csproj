@@ -10,9 +10,12 @@
     <Content Include="wwwroot\app\config.ts" />
     <Content Include="wwwroot\app\controllers\HomeController.ts" />
     <Content Include="wwwroot\app\controllers\ModalController.ts" />
-    <Content Include="wwwroot\app\models\bar.ts" />
+    <Content Include="wwwroot\app\models\Bar.ts" />
+    <Content Include="wwwroot\app\models\NightLifeUser.ts" />
+    <Content Include="wwwroot\app\services\AppHttpService.ts" />
     <Content Include="wwwroot\app\tsconfig.json" />
     <Content Include="wwwroot\js\facebookButton.js" />
+    <Content Include="wwwroot\views\modal.html" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
@@ -30,10 +33,6 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="1.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.0.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="1.1.2" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="wwwroot\app\services\" />
-    <Folder Include="wwwroot\views\" />
   </ItemGroup>
 
 </Project>

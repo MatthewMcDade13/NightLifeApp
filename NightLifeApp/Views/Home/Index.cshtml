@@ -38,7 +38,7 @@
         <input type="text" name="Location" value="Enter Location Here" ng-model="home.location" required/>
         <input type="submit" cast="search"/>
     </form>
-    <a ng-click="home.test()">Click me</a>
+    <a ng-click="home.test()" class="btn btn-secondary">Click me</a>
     <div>
         <h1>{{home.bars.length === 0 ? "No Search Results for " + home.location : null}}</h1>
         <div ng-repeat="bar in home.bars">
@@ -51,6 +51,9 @@
             <img ng-src="/api/search/photo/{{bar.photoReference}}" alt="Photo for this location is not available" />
         </div>
     </div>
+
+    <a ng-click="home.showModal()" class="btn btn-primary">Modal</a>
+    <h1>{{home.message}}</h1>
 </div>
 
 

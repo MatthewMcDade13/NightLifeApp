@@ -3,6 +3,12 @@
     export class Bar
     {
         id: number;
-        numberOfPeopleAttending: number
+        name: string;
+        address: string;
+        placeId: string;
+        photoReference: string;
+        peopleAttending: Array<NightLifeUser>;
+        numberOfPeopleAttending: number;
+        rating: number;
     }
 }

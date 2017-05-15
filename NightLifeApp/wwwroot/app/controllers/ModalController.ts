@@ -2,9 +2,15 @@
 {
     export class ModalController
     {
-        constructor()
+        static $inject = ["close"];
+
+        constructor(public close: any)
         {
-            
+        }
+
+        closeModal(result: any): void
+        {
+            this.close(result, 500);
         }
     }
 
