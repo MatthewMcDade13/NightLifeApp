@@ -56,6 +56,7 @@ var app;
                             case 1:
                                 barResult = _a.sent();
                                 this.$scope.$apply(function () {
+                                    console.log(barResult);
                                     _this.bars = barResult;
                                 });
                                 return [2 /*return*/];

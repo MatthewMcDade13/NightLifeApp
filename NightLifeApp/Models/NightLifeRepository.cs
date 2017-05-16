@@ -58,6 +58,7 @@ namespace NightLifeApp.Models
         {
             return context.Bars
                 .Include(b => b.RSVPs)
+                .ThenInclude(rsvp => rsvp.NightLifeUser)
                 .SingleOrDefault(b => b.Id == id);
         }
 
@@ -76,6 +77,7 @@ namespace NightLifeApp.Models
         {
             List<Bar> bars = context.Bars
                             .Include(b => b.RSVPs)
+                            .ThenInclude(rsvp => rsvp.NightLifeUser)
                             .Where(b => addresses.Contains(b.Address))
                             .ToList();            
 

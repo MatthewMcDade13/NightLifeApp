@@ -58,9 +58,11 @@ namespace NightLifeApp.Controllers.Api
                 await repo.SaveChangesAsync();
             }
             
-            bars = repo.GetBarsByAdress(barAddresses).ToList();                                     
+            bars = repo.GetBarsByAdress(barAddresses).ToList();
 
-            return Json(bars);
+            List<BarViewModel> barsForView = parser.MapBarViewModel(bars);
+
+            return Json(barsForView);
         }       
 
         //GET: api/search/photo/{photoReference}
@@ -78,7 +80,15 @@ namespace NightLifeApp.Controllers.Api
         {
             string lastSearch = HttpContext.Session.GetString("lastSearch");
 
-            return Json(new { LastSearch = lastSearch });
+            try
+            {
+                return Json(new { LastSearch = lastSearch });
+            }
+            finally
+            {
+                HttpContext.Session.Clear();
+            }
+            
         }
 
         private async Task<Coordinate> GetCoords(string location)

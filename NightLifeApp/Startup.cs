@@ -86,6 +86,7 @@ namespace NightLifeApp
             services.AddMvc()
                 .AddJsonOptions( options => {
                     options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 });
         }
 

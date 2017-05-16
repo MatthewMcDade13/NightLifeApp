@@ -46,7 +46,9 @@ namespace NightLifeApp.Controllers.Api
             //If the user attempting to rsvp to a bar that they have already subscribed to, remove them instead
             if (bar.RSVPs.Any(rsvp => rsvp.NightLifeUserId == user.Id))
             {
-                bar.RSVPs.Remove(bar.RSVPs.First(rsvp => rsvp.NightLifeUserId == user.Id));
+                bar.RSVPs.Remove(
+                    bar.RSVPs
+                    .First(rsvp => rsvp.NightLifeUserId == user.Id));
                 bar.NumberOfPeopleAttending--;
                 await repo.SaveChangesAsync();
                 return Json(new { Subbed = false });
@@ -56,7 +58,9 @@ namespace NightLifeApp.Controllers.Api
                 bar.RSVPs.Add( new RSVP()
                 {
                     NightLifeUserId = user.Id,
-                    BarId = bar.Id
+                    NightLifeUser = user,
+                    BarId = bar.Id,
+                    Bar = bar
                 });
 
                 bar.NumberOfPeopleAttending++;

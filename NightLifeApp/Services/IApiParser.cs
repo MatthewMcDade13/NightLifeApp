@@ -11,5 +11,7 @@ namespace NightLifeApp.Services
     public interface IApiParser
     {
         List<Bar> ParseGooglePlacesApiResponse(string jsonResponse);
+
+        List<BarViewModel> MapBarViewModel(List<Bar> bars);
     }
 }

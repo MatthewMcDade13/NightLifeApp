@@ -67,5 +67,38 @@ namespace NightLifeApp.Services
 
             return bars;
         }
+
+        public List<BarViewModel> MapBarViewModel(List<Bar> bars)
+        {
+            List<BarViewModel> barsForView = new List<BarViewModel>();
+
+            for (int i = 0; i < bars.Count(); i++)
+            {
+                //Map properties we need for every bar
+                barsForView.Add(new BarViewModel()
+                {
+                    Id = bars[i].Id,
+                    Name = bars[i].Name,
+                    Address = bars[i].Address,
+                    NumberOfPeopleAttending = bars[i].NumberOfPeopleAttending,
+                    PhotoReference = bars[i].PhotoReference,
+                    PlaceId = bars[i].PlaceId,
+                    Rating = bars[i].Rating,
+                    Users = new List<UserViewModel>()
+                });
+
+                //Then we map only the properties we want to know client side for the user
+                for (int j = 0; j < bars[i].RSVPs.Count; j++)
+                {                   
+                    barsForView[i].Users.Add(new UserViewModel()
+                    {
+                        Name = bars[i].RSVPs.ToList()[i].NightLifeUser.Name,
+                        Email = bars[i].RSVPs.ToList()[i].NightLifeUser.Email
+                    });
+                }
+            }
+
+            return barsForView;
+        }
     }
 }

@@ -29,6 +29,7 @@
             let barResult: Array<Bar> = await this.http.getBars(this.location);
 
             this.$scope.$apply(() => {
+                console.log(barResult);
                 this.bars = barResult;
             });
         }
