@@ -1,6 +1,9 @@
 ﻿@inject SignInManager<NightLifeUser> SignInManager
 
-<h1>You must login before you can RSVP!</h1>
+@if (ViewData["loginMessage"] != null)
+    {
+        <h1>@ViewData["loginMessage"]</h1>
+    }
 
 @{
     var loginProviders = SignInManager.GetExternalAuthenticationSchemes().ToList();

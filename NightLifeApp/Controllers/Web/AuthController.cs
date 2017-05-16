@@ -30,8 +30,7 @@ namespace NightLifeApp.Controllers.Web
                 await signInManager.SignOutAsync();
             }
 
-            //return RedirectToAction(nameof(HomeController.Index), "Home");
-            return Json(new { LoggedIn = User.Identity.IsAuthenticated });
+            return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
         public IActionResult ConfirmLoginSocial()
@@ -41,8 +40,9 @@ namespace NightLifeApp.Controllers.Web
 
         public IActionResult Login()
         {
+            ViewData["loginMessage"] = Request.Query["message"].ToString();
             return View();
-        }
+        }       
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -106,7 +106,7 @@ namespace NightLifeApp.Controllers.Web
                 }
 
                 //If we have gotten this far, the user has logged in with a different social media account.
-                return RedirectToAction(nameof(AuthController.ConfirmLoginSocial), "Auth");
+                return RedirectToAction(nameof(AuthController.Login), "Auth", new { message = "The given email address is already in use. Try logging in with a different provider" });
             }
         }
 

@@ -41,10 +41,31 @@ var app;
             function AppHttpService($http) {
                 this.$http = $http;
             }
+            AppHttpService.prototype.getCurrentUser = function () {
+                return __awaiter(this, void 0, void 0, function () {
+                    return __generator(this, function (_a) {
+                        return [2 /*return*/, this.$http.get("/api/user/getUser")
+                                .then(function (response) {
+                                return response.data;
+                            })];
+                    });
+                });
+            };
+            AppHttpService.prototype.getUserIsAuthenticated = function () {
+                return __awaiter(this, void 0, void 0, function () {
+                    return __generator(this, function (_a) {
+                        return [2 /*return*/, this.$http.get("/api/user/isAuth")
+                                .then(function (response) {
+                                var authResponse = response.data;
+                                return authResponse.isLoggedIn;
+                            })];
+                    });
+                });
+            };
             AppHttpService.prototype.getBars = function (location) {
                 return __awaiter(this, void 0, void 0, function () {
                     return __generator(this, function (_a) {
-                        return [2 /*return*/, this.$http.get("api/search/nearby?location=" + location)
+                        return [2 /*return*/, this.$http.get("/api/search/nearby?location=" + location)
                                 .then(function (response) {
                                 return response.data;
                             })];
@@ -54,7 +75,7 @@ var app;
             AppHttpService.prototype.getLastSearch = function () {
                 return __awaiter(this, void 0, void 0, function () {
                     return __generator(this, function (_a) {
-                        return [2 /*return*/, this.$http.get("api/search/last")
+                        return [2 /*return*/, this.$http.get("/api/search/last")
                                 .then(function (response) {
                                 var json = response.data;
                                 return json.lastSearch;
@@ -65,7 +86,7 @@ var app;
             AppHttpService.prototype.rsvpToBar = function (barId) {
                 return __awaiter(this, void 0, void 0, function () {
                     return __generator(this, function (_a) {
-                        return [2 /*return*/, this.$http.put("api/bar/sub/" + barId, null)
+                        return [2 /*return*/, this.$http.put("/api/bar/sub/" + barId, null)
                                 .then(function (response) {
                                 return response.data;
                             })];

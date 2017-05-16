@@ -3,6 +3,7 @@
     export class NightLifeUser
     {
         name: string;
+        email: string;
         facebookId: string;
     }
 }
