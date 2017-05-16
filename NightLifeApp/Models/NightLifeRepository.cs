@@ -27,7 +27,8 @@ namespace NightLifeApp.Models
             }
         }
 
-        public void AddMultipleBars(List<Bar> bars)
+        //Returns true if any bars were added, false if none were added
+        public bool AddMultipleBars(List<Bar> bars)
         {
             List<Bar> filteredBars = new List<Bar>();
 
@@ -42,15 +43,21 @@ namespace NightLifeApp.Models
                 filteredBars.Add(bars[i]);
             }
 
+            if (filteredBars.Count == 0)
+            {
+                return false;
+            }
+
             //Only add new entries
             context.Bars.AddRange(filteredBars);
+            return true;
         }
 
 
         public Bar GetBarById(int id)
         {
             return context.Bars
-                .Include(b => b.PeopleAttending)
+                .Include(b => b.RSVPs)
                 .SingleOrDefault(b => b.Id == id);
         }
 
@@ -68,7 +75,7 @@ namespace NightLifeApp.Models
         public IEnumerable<Bar> GetBarsByAdress(string[] addresses)
         {
             List<Bar> bars = context.Bars
-                            .Include(b => b.PeopleAttending)
+                            .Include(b => b.RSVPs)
                             .Where(b => addresses.Contains(b.Address))
                             .ToList();            
 

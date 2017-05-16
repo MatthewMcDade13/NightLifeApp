@@ -27,5 +27,23 @@ namespace NightLifeApp.Models
 
             optionsBuilder.UseSqlServer(config["Data:ConnectionString"]);
         }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<RSVP>()
+                .HasKey(rsvp => new { rsvp.BarId, rsvp.NightLifeUserId });
+
+            builder.Entity<RSVP>()
+                .HasOne(rsvp => rsvp.Bar)
+                .WithMany(b => b.RSVPs)
+                .HasForeignKey(rsvp => rsvp.BarId);
+
+            builder.Entity<RSVP>()
+                .HasOne(rsvp => rsvp.NightLifeUser)
+                .WithMany(u => u.RSVPs)
+                .HasForeignKey(rsvp => rsvp.NightLifeUserId);
+        }
     }
 }

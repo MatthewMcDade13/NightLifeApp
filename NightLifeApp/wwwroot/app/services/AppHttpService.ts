@@ -27,7 +27,7 @@
                 });
         }
 
-        async subscribeToBar(barId: number): Promise<any>
+        async rsvpToBar(barId: number): Promise<any>
         {
            return this.$http.put(`api/bar/sub/${barId}`, null)
                 .then(response => {

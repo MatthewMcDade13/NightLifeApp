@@ -52,9 +52,12 @@ namespace NightLifeApp.Controllers.Api
 
             string[] barAddresses = repo.GetBarAddresses(bars).ToArray();
 
-            repo.AddMultipleBars(bars);
-            await repo.SaveChangesAsync();                    
-
+            if (repo.AddMultipleBars(bars))
+            {
+                //Only save changes to database if any data was added.
+                await repo.SaveChangesAsync();
+            }
+            
             bars = repo.GetBarsByAdress(barAddresses).ToList();                                     
 
             return Json(bars);

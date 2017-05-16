@@ -13,7 +13,7 @@ namespace NightLifeApp.Models
         public string Address { get; set; }
         public string PlaceId { get; set; }
         public string PhotoReference { get; set; }
-        public ICollection<NightLifeUser> PeopleAttending { get; set; }
+        public ICollection<RSVP> RSVPs { get; set; }
         public int NumberOfPeopleAttending { get; set; }
         public float Rating { get; set; }
     }

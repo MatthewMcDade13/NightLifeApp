@@ -10,10 +10,12 @@
     <Content Include="wwwroot\app\config.ts" />
     <Content Include="wwwroot\app\controllers\HomeController.ts" />
     <Content Include="wwwroot\app\controllers\ModalController.ts" />
+    <Content Include="wwwroot\app\controllers\NavbarController.ts" />
     <Content Include="wwwroot\app\models\Bar.ts" />
     <Content Include="wwwroot\app\models\NightLifeUser.ts" />
     <Content Include="wwwroot\app\services\AppHttpService.ts" />
     <Content Include="wwwroot\app\tsconfig.json" />
+    <Content Include="wwwroot\css\site.css" />
     <Content Include="wwwroot\js\facebookButton.js" />
     <Content Include="wwwroot\views\modal.html" />
   </ItemGroup>

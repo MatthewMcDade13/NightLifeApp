@@ -10,7 +10,7 @@ namespace NightLifeApp.Models
     {
         void AddBar(Bar bar);
 
-        void AddMultipleBars(List<Bar> bars);
+        bool AddMultipleBars(List<Bar> bars);
 
         Bar GetBarById(int id);
 

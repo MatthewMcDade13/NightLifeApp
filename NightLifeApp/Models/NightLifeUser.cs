@@ -11,5 +11,6 @@ namespace NightLifeApp.Models
     {
         public string Name { get; set; }
         public string FacebookId { get; set; }
+        public ICollection<RSVP> RSVPs { get; set; }
     }
 }

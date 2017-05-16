@@ -24,13 +24,13 @@ namespace NightLifeApp.Controllers.Api
         }
 
         /// <summary>
-        /// Add or removes user from a Bar model based on if that user is already
-        /// subscribed to it or not
+        /// Add or removes user from a Bar model based on if that user has rsvp'ed
+        ///  to it or not
         /// </summary>
         /// <param name="barId">Id of bar subscribing to</param>
         /// <returns>True is user was added to the Bar model, False if user was removed from Bar model</returns>
         [HttpPut("sub/{barId}")]        
-        public async Task<IActionResult> ToggleSubscribeToBar(int barId)
+        public async Task<IActionResult> ToggleRSVPToBar(int barId)
         {
             //We dont want Facebook or Google auth to redirect user,
             //So send a json response that contains url for client to redirect to
@@ -43,21 +43,26 @@ namespace NightLifeApp.Controllers.Api
 
             Bar bar = repo.GetBarById(barId);
 
-            //If the user attempting to subscribe to a bar that they have already subscribed to, remove them instead
-            if (bar.PeopleAttending.Any(u => u.UserName == user.UserName))
+            //If the user attempting to rsvp to a bar that they have already subscribed to, remove them instead
+            if (bar.RSVPs.Any(rsvp => rsvp.NightLifeUserId == user.Id))
             {
-                bar.PeopleAttending.Remove(user);
+                bar.RSVPs.Remove(bar.RSVPs.First(rsvp => rsvp.NightLifeUserId == user.Id));
                 bar.NumberOfPeopleAttending--;
                 await repo.SaveChangesAsync();
                 return Json(new { Subbed = false });
             }
             else
             {
-                bar.PeopleAttending.Add(user);
+                bar.RSVPs.Add( new RSVP()
+                {
+                    NightLifeUserId = user.Id,
+                    BarId = bar.Id
+                });
+
                 bar.NumberOfPeopleAttending++;
                 await repo.SaveChangesAsync();
                 return Json(new { Subbed = true });
-            }            
+            }
         }
     }
 }

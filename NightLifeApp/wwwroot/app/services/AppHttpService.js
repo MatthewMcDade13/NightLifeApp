@@ -62,7 +62,7 @@ var app;
                     });
                 });
             };
-            AppHttpService.prototype.subscribeToBar = function (barId) {
+            AppHttpService.prototype.rsvpToBar = function (barId) {
                 return __awaiter(this, void 0, void 0, function () {
                     return __generator(this, function (_a) {
                         return [2 /*return*/, this.$http.put("api/bar/sub/" + barId, null)

@@ -48,21 +48,18 @@
             });       
         }
 
-        async subscribeToBar(bar: Bar): Promise<void>
+        async rsvpToBar(bar: Bar): Promise<void>
         {
-            console.log(bar.id);
+            let rsvpResponse: any = await this.http.rsvpToBar(bar.id);
 
-
-            let subscribeResponse: any = await this.http.subscribeToBar(bar.id);
-
-            if (subscribeResponse.redirectUrl)
+            if (rsvpResponse.redirectUrl)
             {
-                this.$window.location.href = subscribeResponse.redirectUrl;
+                this.$window.location.href = rsvpResponse.redirectUrl;
                 return;
             }
 
             this.$scope.$apply(() => {
-                if (subscribeResponse.subbed)
+                if (rsvpResponse.subbed)
                 {
                     bar.numberOfPeopleAttending++;
                 }

@@ -83,22 +83,20 @@ var app;
                     });
                 });
             };
-            HomeController.prototype.subscribeToBar = function (bar) {
+            HomeController.prototype.rsvpToBar = function (bar) {
                 return __awaiter(this, void 0, void 0, function () {
-                    var subscribeResponse;
+                    var rsvpResponse;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
-                            case 0:
-                                console.log(bar.id);
-                                return [4 /*yield*/, this.http.subscribeToBar(bar.id)];
+                            case 0: return [4 /*yield*/, this.http.rsvpToBar(bar.id)];
                             case 1:
-                                subscribeResponse = _a.sent();
-                                if (subscribeResponse.redirectUrl) {
-                                    this.$window.location.href = subscribeResponse.redirectUrl;
+                                rsvpResponse = _a.sent();
+                                if (rsvpResponse.redirectUrl) {
+                                    this.$window.location.href = rsvpResponse.redirectUrl;
                                     return [2 /*return*/];
                                 }
                                 this.$scope.$apply(function () {
-                                    if (subscribeResponse.subbed) {
+                                    if (rsvpResponse.subbed) {
                                         bar.numberOfPeopleAttending++;
                                     }
                                     else {
