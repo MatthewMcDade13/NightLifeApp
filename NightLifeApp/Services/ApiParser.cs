@@ -93,7 +93,8 @@ namespace NightLifeApp.Services
                     barsForView[i].Users.Add(new UserViewModel()
                     {
                         Name = bars[i].RSVPs.ToList()[i].NightLifeUser.Name,
-                        Email = bars[i].RSVPs.ToList()[i].NightLifeUser.Email
+                        Email = bars[i].RSVPs.ToList()[i].NightLifeUser.Email,
+                        FacebookId = bars[i].RSVPs.ToList()[i].NightLifeUser.FacebookId
                     });
                 }
             }
