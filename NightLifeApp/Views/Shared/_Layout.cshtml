@@ -1,41 +1,68 @@
 ﻿<!DOCTYPE html>
-
+@inject SignInManager<NightLifeUser> SignInManager
+@inject UserManager<NightLifeUser> UserManager
+@{
+    var loginProviders = SignInManager.GetExternalAuthenticationSchemes().ToList();
+    var user = await UserManager.GetUserAsync(User);
+}
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
     <link href="~/lib/boostrap/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/lib/angular-bootstrap/ui-bootstrap-csp.css" rel="stylesheet" />
     <link href="~/css/site.css" rel="stylesheet" />
 </head>
-<body ng-app="NightLife">
+<body ng-app="NightLife" ng-cloak>
 
-    <div ng-controller="NavbarController as nav" ng-init="nav.getUserIsAuthenticated()">
-        <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse">
-            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <a class="navbar-brand" href="#">NightLife</a>
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item" ng-hide="nav.isUserLoggedIn">
-                        <a class="nav-link" asp-controller="Auth" asp-action="Login">Sign In</a>
-                    </li>
-                    <li class="nav-item dropdown" ng-if="nav.isUserLoggedIn" ng-init="nav.getCurrentUser()">
+    <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="/">NightLife</a>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                </li>
+                @if (User.Identity.IsAuthenticated && user != null)
+                {
+                    <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {{nav.currentUser.name}}
+                            @user.Name                           
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item" asp-controller="Auth" asp-action="Logout">Logout</a>
                         </div>
                     </li>
-                </ul>
-            </div>
-        </nav>
-    </div>
+                }                
+            </ul>
+            @if (User.Identity.IsAuthenticated == false)
+            {
+                <form asp-controller="Auth" asp-action="ExternalLogin" method="post" class="form-inline">
+
+                    @foreach (var provider in loginProviders)
+                    {
+                        <button asp-controller="Auth" asp-action="ExternalLogin" type="submit" class="btn btn-secondary loginButton"
+                                name="provider" value="@provider.AuthenticationScheme" title="Login with @provider.DisplayName">
+                            Login with @provider.AuthenticationScheme
+                        </button>
+                    }
+
+                </form>
+            }            
+        </div>
+    </nav>
+
+    @if (TempData["loginMessage"].ToString() != "")
+    {
+        <div class="alert alert-danger" role="alert">
+            @TempData["loginMessage"]
+        </div>
+    }
+
+
 
 
     <div>
@@ -49,12 +76,12 @@
     <script src="~/lib/boostrap/dist/js/bootstrap.min.js"></script>
     <script src="~/lib/angular/angular.min.js"></script>
     <script src="~/lib/angular-modal-service/dst/angular-modal-service.min.js"></script>
-    <script src="~/lib/angular-route/angular-route.min.js"></script>
+    <script src="~/lib/angular-route/angular-route.min.js"></script>   
     <script src="~/app/app.js"></script>
     <script src="~/app/config.js"></script>
     <script src="~/app/controllers/HomeController.js"></script>
     <script src="~/app/controllers/ModalController.js"></script>
-    <script src="~/app/controllers/NavbarController.js"></script>
     <script src="~/app/services/AppHttpService.js"></script>
+    <script src="~/js/tooltips.js"></script>
 </body>
 </html>

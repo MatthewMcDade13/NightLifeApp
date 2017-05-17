@@ -20,6 +20,11 @@
             console.log("In ctor");
         }
 
+        async login(): Promise<void>
+        {
+            await this.http.loginUser();
+        }
+
         async getCurrentUser(): Promise<void>
         {
             console.log("getting current user");

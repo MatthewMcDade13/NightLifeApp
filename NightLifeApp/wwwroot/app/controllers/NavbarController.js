@@ -44,6 +44,18 @@ var app;
                 this.isUserLoggedIn = false;
                 console.log("In ctor");
             }
+            NavbarController.prototype.login = function () {
+                return __awaiter(this, void 0, void 0, function () {
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0: return [4 /*yield*/, this.http.loginUser()];
+                            case 1:
+                                _a.sent();
+                                return [2 /*return*/];
+                        }
+                    });
+                });
+            };
             NavbarController.prototype.getCurrentUser = function () {
                 return __awaiter(this, void 0, void 0, function () {
                     var _this = this;

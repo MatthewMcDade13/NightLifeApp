@@ -1,59 +1,44 @@
 ﻿
-@inject SignInManager<NightLifeUser> SignInManager
-
 <div id="fb-root"></div>
 
+<main>
+    <div ng-controller="HomeController as home" ng-cloak>        
+        <div ng-init="home.getLastSearch(); home.getUserIsAuthenticated();"></div>
 
-
-<h1>AYY LMAO</h1>
-
-<a href="/api/search/test">Click Me</a>
-
-<a asp-controller="Auth" asp-action="Logout">Logout</a>
-
-@{
-    var loginProviders = SignInManager.GetExternalAuthenticationSchemes().ToList();
-} 
-
-<form asp-controller="Auth" asp-action="ExternalLogin" method="post">
-
-    @foreach(var provider in loginProviders)
-    {
-        <button type="submit" class="btn btn-success" name="provider" value="@provider.AuthenticationScheme" title="Login with @provider.DisplayName">Login with @provider.AuthenticationScheme</button>
-    }
-
-</form>
-
-<div>
-    Signed In: @User.Identity.IsAuthenticated
-</div>
-<br />
-<br />
-
-<div ng-controller="HomeController as home" ng-cloak>
-
-    <div ng-init="home.getLastSearch()"></div>
-    
-    <form ng-submit="home.getBars()">
-        <input type="text" name="Location" value="Enter Location Here" ng-model="home.location" required/>
-        <input type="submit" cast="search"/>
-    </form>
-    <div>
-        <h1>{{home.bars.length === 0 ? "No Search Results for " + home.location : null}}</h1>
-        <div ng-repeat="bar in home.bars">
-            <a ng-click="home.rsvpToBar(bar)" class="btn btn-primary">Im Going!</a>
-            <h3>{{bar.name}}</h3>
-            <p>{{bar.address}}</p>
-            <p>Number of people attending: {{bar.numberOfPeopleAttending}}</p>
-            <p>Place Id: {{bar.placeId}}</p>
-            <p>Rating: {{bar.rating === 0 ? "Rating Not Available" : bar.rating}}</p>
-            <img ng-src="/api/search/photo/{{bar.photoReference}}" alt="Photo for this location is not available" />
-        </div>
+        <a ng-click="home.showModal()" class="btn btn-primary">Modal</a>
+        <form ng-submit="home.getBars()">
+            <input type="text" name="Location" value="Enter Location Here" ng-model="home.location" ng-change="home.clearResults()"/>
+            <input type="submit" cast="search" />
+        </form>
+        <div id="barList">
+            <div class="container-fluid">
+                <h1>{{home.bars.length === 0 ? "No Search Results for " + home.location : null}}</h1>
+                <div class="row barRow">
+                    <div class="col-4" ng-repeat="bar in home.bars">
+                        <div class="bar">                            
+                            <h4>{{bar.name}}</h4>
+                            <!--<p>{{bar.address}}</p>-->                            
+                            <!--<p>Place Id: {{bar.placeId}}</p>-->
+                            <!--<p>Rating: {{bar.rating === 0 ? "Rating Not Available" : bar.rating}}</p>-->
+                            <img class="barImg img-thumbnail" ng-src="/api/search/photo/{{bar.photoReference}}" alt="Photo for this location is not available" />
+                            <p>Number of people attending: {{bar.numberOfPeopleAttending}}</p>
+                            <button ng-show="home.isUserLoggedIn" ng-click="home.rsvpToBar(bar)" class="btn btn-primary">Im Going!</button>
+                            <div class="tooltipWrapper" data-placement="bottom" 
+                                 title="You must be logged in to RSVP!"
+                                 data-animation="false"
+                                 onmouseenter="$(this).tooltip('show')">
+                                <button ng-hide="home.isUserLoggedIn" class="btn btn-primary" disabled>
+                                    Im Going!
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>  
+        <h1>{{home.message}}</h1>
     </div>
-
-    <a ng-click="home.showModal()" class="btn btn-primary">Modal</a>
-    <h1>{{home.message}}</h1>
-</div>
+</main>
 
 
 

@@ -45,14 +45,42 @@ var app;
                 this.ModalService = ModalService;
                 this.http = AppHttpService;
                 this.location = "";
+                this.isUserLoggedIn = false;
             }
+            HomeController.prototype.clearResults = function () {
+                if (this.location === "") {
+                    this.bars = null;
+                }
+            };
+            HomeController.prototype.getUserIsAuthenticated = function () {
+                return __awaiter(this, void 0, void 0, function () {
+                    var _this = this;
+                    var userResponse;
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0: return [4 /*yield*/, this.http.getUserIsAuthenticated()];
+                            case 1:
+                                userResponse = _a.sent();
+                                this.$scope.$apply(function () {
+                                    _this.isUserLoggedIn = userResponse;
+                                });
+                                return [2 /*return*/];
+                        }
+                    });
+                });
+            };
             HomeController.prototype.getBars = function () {
                 return __awaiter(this, void 0, void 0, function () {
                     var _this = this;
                     var barResult;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
-                            case 0: return [4 /*yield*/, this.http.getBars(this.location)];
+                            case 0:
+                                if (this.location === "") {
+                                    this.bars = null;
+                                    return [2 /*return*/];
+                                }
+                                return [4 /*yield*/, this.http.getBars(this.location)];
                             case 1:
                                 barResult = _a.sent();
                                 this.$scope.$apply(function () {

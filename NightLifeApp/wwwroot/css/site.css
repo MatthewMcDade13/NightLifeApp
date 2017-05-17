@@ -1,14 +1,107 @@
-﻿.ml-auto li
+﻿body
+{
+    background-color: #636363;
+    background-image: url("../background.jpg");
+    color: white;
+}
+
+.loginButton
+{
+    margin-right: 60px;
+}
+
+main
+{
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: 1000px;
+}
+
+#barList
+{
+    border-radius: 25px;
+    background-color: #f1f1f1;
+    color: black;
+}
+
+.barRow
+{
+    margin-top: 50px;
+}
+
+.bar
+{
+    border-style: solid;
+    margin-right: 0;
+    margin-top: 50px;
+    height: 400px;
+    width: 333px;
+}
+
+.barImg
+{
+    min-width:100px;
+    min-height: 100px;
+    height: 225px;
+    width: 225px;
+}
+
+button:hover
+{
+    cursor: pointer;
+}
+
+.tooltipWrapper
+{
+    display: inline-block;
+}
+
+.tooltipWrapper .btn[disabled]
+{
+    pointer-events: none;
+}
+
+.tooltipWrapper
+{
+    cursor: not-allowed;
+}
+
+.modal
+{
+    color: black;
+}
+
+.ml-auto li
 {
     margin-right: 50px;
 }
 
 .dropdown
 {
-    padding-right: 75px;
+    padding-right: 50px;
+}
+
+.dropdown:hover
+{
+    cursor: pointer;
 }
 
 .navbar-brand
 {
     padding-left: 75px;
+}
+
+.alert
+{
+    width: 500px;
+    position: relative;
+    float: right;
+    animation: fadein 0.35s;
+}
+
+@keyframes fadein
+{
+    from { top: -75px; opacity: 0; }
+    to { top: 0px; opacity: 1; }
 }

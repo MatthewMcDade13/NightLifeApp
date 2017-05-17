@@ -41,6 +41,18 @@ var app;
             function AppHttpService($http) {
                 this.$http = $http;
             }
+            AppHttpService.prototype.loginUser = function () {
+                return __awaiter(this, void 0, void 0, function () {
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0: return [4 /*yield*/, this.$http.post("/auth/ExternalLogin", null)];
+                            case 1:
+                                _a.sent();
+                                return [2 /*return*/];
+                        }
+                    });
+                });
+            };
             AppHttpService.prototype.getCurrentUser = function () {
                 return __awaiter(this, void 0, void 0, function () {
                     return __generator(this, function (_a) {

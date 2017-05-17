@@ -6,7 +6,8 @@
     "font-awesome": "4.7.0",
     "angular": "1.6.4",
     "angular-route": "1.6.4",
-    "angular-modal-service": "0.11.1"
+    "angular-modal-service": "0.11.1",
+    "angular-bootstrap": "2.5.0"
   },
   "resolutions": {
     "angular": "1.6.4"

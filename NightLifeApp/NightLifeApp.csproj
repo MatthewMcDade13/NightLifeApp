@@ -15,8 +15,10 @@
     <Content Include="wwwroot\app\models\NightLifeUser.ts" />
     <Content Include="wwwroot\app\services\AppHttpService.ts" />
     <Content Include="wwwroot\app\tsconfig.json" />
+    <Content Include="wwwroot\background.jpg" />
     <Content Include="wwwroot\css\site.css" />
     <Content Include="wwwroot\js\facebookButton.js" />
+    <Content Include="wwwroot\js\tooltips.js" />
     <Content Include="wwwroot\views\modal.html" />
   </ItemGroup>
   <ItemGroup>

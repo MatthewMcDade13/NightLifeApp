@@ -11,6 +11,8 @@ namespace NightLifeApp.Controllers
     {
         public IActionResult Index()
         {
+            TempData["loginMessage"] = Request.Query["message"].ToString();
+
             return View();
         }
     }

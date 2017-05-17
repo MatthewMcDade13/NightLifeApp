@@ -11,6 +11,11 @@
         {
         }
 
+        async loginUser(): Promise<void>
+        {
+            await this.$http.post("/auth/ExternalLogin", null);
+        }
+
         async getCurrentUser(): Promise<NightLifeUser>
         {
             return this.$http.get("/api/user/getUser")

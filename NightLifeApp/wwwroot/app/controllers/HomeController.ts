@@ -8,6 +8,7 @@
         bars: Array<Bar>;
         location: string;
         message: string;
+        isUserLoggedIn: boolean;
 
         http: AppHttpService;
             
@@ -22,10 +23,34 @@
         {
             this.http = AppHttpService;
             this.location = "";
+            this.isUserLoggedIn = false;
+        }
+       
+        clearResults()
+        {
+            if (this.location === "")
+            {
+                this.bars = null;
+            }
+        }
+
+        async getUserIsAuthenticated(): Promise<void>
+        {
+            let userResponse = await this.http.getUserIsAuthenticated();
+
+            this.$scope.$apply(() => {
+                this.isUserLoggedIn = userResponse;
+            });
         }
 
         async getBars(): Promise<void>
         {
+            if (this.location === "")
+            {
+                this.bars = null;
+                return;
+            }
+
             let barResult: Array<Bar> = await this.http.getBars(this.location);
 
             this.$scope.$apply(() => {

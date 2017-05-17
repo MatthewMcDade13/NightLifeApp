@@ -33,14 +33,8 @@ namespace NightLifeApp.Controllers.Web
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
-        public IActionResult ConfirmLoginSocial()
-        {
-            return View();
-        }
-
         public IActionResult Login()
-        {
-            ViewData["loginMessage"] = Request.Query["message"].ToString();
+        {            
             return View();
         }       
 
@@ -100,13 +94,16 @@ namespace NightLifeApp.Controllers.Web
 
                     if (result.Succeeded)
                     {
-                        await signInManager.SignInAsync(user, false);
+                        await signInManager.SignInAsync(user, isPersistent: false);
                         return RedirectToLocal(returnUrl);
                     }
                 }
 
+                //Sign the user out to avoid any wierdness with Authentication
+                await signInManager.SignOutAsync();
+
                 //If we have gotten this far, the user has logged in with a different social media account.
-                return RedirectToAction(nameof(AuthController.Login), "Auth", new { message = "The given email address is already in use. Try logging in with a different provider" });
+                return RedirectToAction(nameof(HomeController.Index), "Home", new { message = "The given email address is already in use. Try logging in with a different provider" });
             }
         }
 
