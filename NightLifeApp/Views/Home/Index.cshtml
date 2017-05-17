@@ -6,9 +6,13 @@
         <div ng-init="home.getLastSearch(); home.getUserIsAuthenticated();"></div>
 
         <a ng-click="home.showModal()" class="btn btn-primary">Modal</a>
-        <form ng-submit="home.getBars()">
-            <input type="text" name="Location" value="Enter Location Here" ng-model="home.location" ng-change="home.clearResults()"/>
-            <input type="submit" cast="search" />
+        <form ng-submit="home.getBars()" ng-class="home.center">
+            <div class="form-group">
+                <input id="barSearchInput" class="form-control text-center" type="text" name="Location"
+                       value="Location" ng-model="home.location" ng-change="home.clearResults()" 
+                       placeholder="Enter Location Here" autocomplete="off"/>
+                <input class="btn btn-secondary" type="submit" cast="search" />
+            </div>
         </form>
         <div id="barList">
             <div class="container-fluid">

@@ -46,10 +46,12 @@ var app;
                 this.http = AppHttpService;
                 this.location = "";
                 this.isUserLoggedIn = false;
+                this.center = "center";
             }
             HomeController.prototype.clearResults = function () {
                 if (this.location === "") {
                     this.bars = null;
+                    this.center = "center";
                 }
             };
             HomeController.prototype.getUserIsAuthenticated = function () {
@@ -80,11 +82,11 @@ var app;
                                     this.bars = null;
                                     return [2 /*return*/];
                                 }
+                                this.center = null;
                                 return [4 /*yield*/, this.http.getBars(this.location)];
                             case 1:
                                 barResult = _a.sent();
                                 this.$scope.$apply(function () {
-                                    console.log(barResult);
                                     _this.bars = barResult;
                                 });
                                 return [2 /*return*/];

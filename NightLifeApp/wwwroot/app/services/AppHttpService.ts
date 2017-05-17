@@ -11,19 +11,6 @@
         {
         }
 
-        async loginUser(): Promise<void>
-        {
-            await this.$http.post("/auth/ExternalLogin", null);
-        }
-
-        async getCurrentUser(): Promise<NightLifeUser>
-        {
-            return this.$http.get("/api/user/getUser")
-                .then(response => {
-                    return <NightLifeUser>response.data;
-                });
-        }
-
         async getUserIsAuthenticated(): Promise<boolean>
         {
             return this.$http.get("/api/user/isAuth")

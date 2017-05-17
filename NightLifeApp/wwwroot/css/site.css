@@ -5,6 +5,39 @@
     color: white;
 }
 
+@keyframes fadein
+{
+    from
+    {
+        top: -75px;
+        opacity: 0;
+    }
+
+    to
+    {
+        top: 0px;
+        opacity: 1;
+    }
+}
+
+#barSearchInput
+{
+    margin-right: auto;
+    margin-left: auto;
+    width: 500px;
+}
+
+.center
+{
+    margin-top: 40%;
+    transition: 0.5s;
+}
+
+.center-add, .center-remove
+{
+    transition: all 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940);
+}
+
 .loginButton
 {
     margin-right: 60px;
@@ -16,6 +49,7 @@ main
     margin-left: auto;
     margin-right: auto;
     width: 1000px;
+    transition: 0.5s;
 }
 
 #barList
@@ -100,8 +134,3 @@ button:hover
     animation: fadein 0.35s;
 }
 
-@keyframes fadein
-{
-    from { top: -75px; opacity: 0; }
-    to { top: 0px; opacity: 1; }
-}

@@ -8,6 +8,7 @@
         bars: Array<Bar>;
         location: string;
         message: string;
+        center: string;
         isUserLoggedIn: boolean;
 
         http: AppHttpService;
@@ -24,6 +25,7 @@
             this.http = AppHttpService;
             this.location = "";
             this.isUserLoggedIn = false;
+            this.center = "center";
         }
        
         clearResults()
@@ -31,6 +33,7 @@
             if (this.location === "")
             {
                 this.bars = null;
+                this.center = "center";
             }
         }
 
@@ -51,11 +54,11 @@
                 return;
             }
 
+            this.center = null;
             let barResult: Array<Bar> = await this.http.getBars(this.location);
-
-            this.$scope.$apply(() => {
-                console.log(barResult);
-                this.bars = barResult;
+            
+            this.$scope.$apply(() => {                
+                this.bars = barResult;                
             });
         }
 
