@@ -5,16 +5,16 @@
     var loginProviders = SignInManager.GetExternalAuthenticationSchemes().ToList();
     var user = await UserManager.GetUserAsync(User);
 }
-<html>
+<html ng-app="NightLife">
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title</title>
+    <title ng-bind="title"></title>
     <link href="~/lib/boostrap/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
     <link href="~/lib/angular-bootstrap/ui-bootstrap-csp.css" rel="stylesheet" />
     <link href="~/css/site.css" rel="stylesheet" />
 </head>
-<body ng-app="NightLife" ng-cloak>
+<body ng-cloak>
 
     <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse">
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,8 +63,6 @@
     }
 
 
-
-
     <div>
         @RenderBody()
     </div>
@@ -80,8 +78,10 @@
     <script src="~/lib/angular-route/angular-route.min.js"></script>   
     <script src="~/app/app.js"></script>
     <script src="~/app/config.js"></script>
+    <script src="~/app/directives/spinner.js"></script>
     <script src="~/app/controllers/HomeController.js"></script>
     <script src="~/app/controllers/ModalController.js"></script>
+    <script src="~/app/controllers/BarDetailsController.js"></script>
     <script src="~/app/services/AppHttpService.js"></script>
     <script src="~/scripts/tooltips.js"></script>
 </body>

@@ -1,0 +1,42 @@
+﻿<main>
+    <div ng-init="home.getLastSearch(); home.getUserIsAuthenticated();"></div>
+
+    <form ng-submit="home.getBars()" ng-class="home.center">
+        <div class="form-group">
+            <input id="barSearchInput" class="form-control text-center" type="text" name="Location"
+                   value="Location" ng-model="home.location" ng-change="home.clearResults()"
+                   placeholder="Enter Location Here" autocomplete="off" />
+        </div>
+    </form>
+    <spinner message="Getting Results for {{home.location}}" ng-show="home.isBusy"></spinner>
+    <div id="barList">
+        <h3 ng-show="home.bars" style="text-align: center;">{{home.location}}</h3>
+        <div class="container-fluid">
+            <h1>{{home.bars.length === 0 ? "No Search Results for " + home.location : null}}</h1>
+            <div class="row">
+                <div class="col-4 barWrapper" ng-repeat="bar in home.bars">
+                    <div class="card" style="width: 20rem;">
+                        <img class="card-img-top barImg" ng-src="/api/search/photo/{{bar.photoReference}}"
+                             alt="Photo for this location is not available" />
+                        <div class="card-block">
+                            <h4 class="card-title" title="{{bar.name}}">{{bar.name}}</h4>
+                            <button style="margin-bottom: 15px;" class="btn btn-info" ng-click="home.showRSVPModal(bar)">
+                                People Attending: {{bar.numberOfPeopleAttending}}
+                            </button>
+                            <div class="tooltipWrapper" data-placement="bottom"
+                                 title="You must be logged in to RSVP!"
+                                 data-animation="false"
+                                 onmouseenter="$(this).tooltip('show')">
+                                <button ng-hide="home.isUserLoggedIn" class="btn btn-outline-success" disabled>
+                                    Im Going!
+                                </button>
+                            </div>
+                            <button ng-show="home.isUserLoggedIn" ng-click="home.rsvpToBar(bar)" class="btn btn-primary">Im Going!</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h1>{{home.message}}</h1>
+</main>

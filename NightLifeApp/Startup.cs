@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using NightLifeApp.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using AutoMapper;
+using NightLifeApp.ViewModels;
 
 namespace NightLifeApp
 {
@@ -93,6 +95,12 @@ namespace NightLifeApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            Mapper.Initialize(config =>
+            {
+                config.CreateMap<NightLifeUser, UserViewModel>().ReverseMap();
+                config.CreateMap<Bar, BarViewModel>().ReverseMap();
+            });
+
             loggerFactory.AddConsole();
 
             app.UseStaticFiles();
@@ -131,9 +139,7 @@ namespace NightLifeApp
                     "Default",
                     "{controller}/{action}/{id?}",
                     new { controller = "Home", action = "Index" });
-            });
-
-           
+            });           
         }
     }
 }

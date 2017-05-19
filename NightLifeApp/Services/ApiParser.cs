@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.IO;
 using Microsoft.AspNetCore.Mvc;
 using NightLifeApp.Models;
+using AutoMapper;
 
 namespace NightLifeApp.Services
 {
@@ -28,24 +29,11 @@ namespace NightLifeApp.Services
 
             for (int i = 0; i < json.results.Count; i++)
             {
-                name = string.Empty;
-                address = string.Empty;                
-                photoReference = string.Empty;
+                name = json.results[i].name;
+                address = json.results[i].vicinity;
+                placeId = json.results[i].place_id;
                 rating = 0.0f;
 
-                //Make sure none of the fields we want are null to avoid runtime errors.
-                if (json.results[i].name != null)
-                {
-                    name = json.results[i].name;
-                }
-                if (json.results[i].vicinity != null)
-                {
-                    address = json.results[i].vicinity;
-                }
-                if (json.results[i].place_id != null)
-                {
-                    placeId = json.results[i].place_id;
-                }
                 if (json.results[i].photos != null)
                 {
                     photoReference = json.results[i].photos[0].photo_reference;
@@ -68,6 +56,68 @@ namespace NightLifeApp.Services
             return bars;
         }
 
+        public BarDetailsViewModel ParseGooglePlaceDetailsResponse(string jsonResponse)
+        {
+
+            bool isOpenNow = false;
+            List<string> daysOpen = new List<string>();
+            float priceLevel = 0.0f;
+            float rating = 0.0f;
+            List<BarReviewViewModel> reviews = new List<BarReviewViewModel>();
+            float userRating = 0.0f;
+
+            dynamic json = JsonConvert.DeserializeObject(jsonResponse);
+
+            //Ensure our non nullable types are not null to avoid runtime errors
+            if (json.result.opening_hours != null)
+            {
+                isOpenNow = json.result.opening_hours.open_now;
+            }
+            if (json.result.opening_hours != null)
+            {
+                daysOpen.AddRange(json.result.opening_hours.weekday_text.ToObject<string[]>());
+            }
+            if (json.result.rating != null)
+            {
+                rating = json.result.rating;
+            }
+            if (json.result.price_level != null)
+            {
+                priceLevel = json.result.price_level;
+            }
+            if (json.result.reviews != null)
+            {
+                for (int i = 0; i < json.result.reviews.Count; i++)
+                {
+                    if (json.result.reviews[i].rating != null)
+                    {
+                        userRating = json.result.reviews[i].rating;
+                    }
+
+                    reviews.Add(new BarReviewViewModel()
+                    {
+                        Author = json.result.reviews[i].author_name,
+                        ProfilePhotoUrl = json.result.reviews[i].profile_photo_url,
+                        Rating = userRating,
+                        ReviewDate = json.result.reviews[i].relative_time_description,
+                        ReviewBody = json.result.reviews[i].text
+                    });
+                }
+            }
+
+            BarDetailsViewModel barDetails = new BarDetailsViewModel()
+            {
+                PhoneNumber = json.result.formatted_phone_number,
+                IsOpenNow = isOpenNow,
+                DaysOpen = daysOpen,
+                PriceLevel = priceLevel,
+                Rating = rating,
+                Reviews = reviews
+            };
+
+            return barDetails;
+        }
+
         public List<BarViewModel> MapBarViewModel(List<Bar> bars)
         {
             List<BarViewModel> barsForView = new List<BarViewModel>();
@@ -84,19 +134,8 @@ namespace NightLifeApp.Services
                     PhotoReference = bars[i].PhotoReference,
                     PlaceId = bars[i].PlaceId,
                     Rating = bars[i].Rating,
-                    Users = new List<UserViewModel>()
+                    Users = Mapper.Map<List<UserViewModel>>(bars[i].RSVPs.Select(rsvp => rsvp.NightLifeUser))
                 });
-
-                //Then we map only the properties we want to know client side for the user
-                for (int j = 0; j < bars[i].RSVPs.Count; j++)
-                {                   
-                    barsForView[i].Users.Add(new UserViewModel()
-                    {
-                        Name = bars[i].RSVPs.ToList()[i].NightLifeUser.Name,
-                        Email = bars[i].RSVPs.ToList()[i].NightLifeUser.Email,
-                        FacebookId = bars[i].RSVPs.ToList()[i].NightLifeUser.FacebookId
-                    });
-                }
             }
 
             return barsForView;

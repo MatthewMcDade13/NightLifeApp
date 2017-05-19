@@ -62,6 +62,26 @@ var app;
                     });
                 });
             };
+            AppHttpService.prototype.getBarById = function (barId) {
+                return __awaiter(this, void 0, void 0, function () {
+                    return __generator(this, function (_a) {
+                        return [2 /*return*/, this.$http.get("/api/bar/getbar/" + barId)
+                                .then(function (response) {
+                                return response.data;
+                            })];
+                    });
+                });
+            };
+            AppHttpService.prototype.getBarDetails = function (placeId) {
+                return __awaiter(this, void 0, void 0, function () {
+                    return __generator(this, function (_a) {
+                        return [2 /*return*/, this.$http.get("/api/bar/details/" + placeId)
+                                .then(function (response) {
+                                return response.data;
+                            })];
+                    });
+                });
+            };
             AppHttpService.prototype.getLastSearch = function () {
                 return __awaiter(this, void 0, void 0, function () {
                     return __generator(this, function (_a) {
@@ -77,6 +97,16 @@ var app;
                 return __awaiter(this, void 0, void 0, function () {
                     return __generator(this, function (_a) {
                         return [2 /*return*/, this.$http.put("/api/bar/sub/" + barId, null)
+                                .then(function (response) {
+                                return response.data;
+                            })];
+                    });
+                });
+            };
+            AppHttpService.prototype.getListOfUsersAttending = function (barId) {
+                return __awaiter(this, void 0, void 0, function () {
+                    return __generator(this, function (_a) {
+                        return [2 /*return*/, this.$http.get("/api/bar/getusers/" + barId)
                                 .then(function (response) {
                                 return response.data;
                             })];

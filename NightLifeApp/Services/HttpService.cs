@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using NightLifeApp.ViewModels;
 
 namespace NightLifeApp.Services
 {
@@ -33,6 +34,22 @@ namespace NightLifeApp.Services
                     Byte[] bytes = await response.Content.ReadAsByteArrayAsync();
 
                     return bytes;
+                }
+            }
+        }
+
+        public async Task<string> GetBarDetails(string placeId)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                using (HttpResponseMessage response =
+                    await client.GetAsync($"https://maps.googleapis.com/maps/api/place/details/json?placeid={placeId}&key={googlePlacesKey}"))
+                {
+                    response.EnsureSuccessStatusCode();
+
+                    string jsonString = await response.Content.ReadAsStringAsync();
+
+                    return jsonString;
                 }
             }
         }

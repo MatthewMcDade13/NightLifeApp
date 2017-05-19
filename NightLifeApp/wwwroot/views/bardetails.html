@@ -1,0 +1,53 @@
+﻿<main>
+    <div ng-init="bar.getBar()"></div>
+    <div>
+        <h1>{{bar.currentBar.name}}</h1>
+    </div>
+    <h3>Reviews</h3>
+    <h3 ng-show="bar.barReviews.length === 0" class="details">No Reviews Yet!</h3>
+    <div class="media details" ng-repeat="review in bar.barReviews">
+        <img class="d-flex mr-3" ng-src="{{review.profilePhotoUrl}}" alt="Google User Profile Image">
+        <div class="media-body">
+            <h5 class="mt-0">{{review.author}}</h5>
+            <p><strong>Rating: {{review.rating}}</strong></p>
+            {{review.reviewBody}}
+            <hr />
+            <footer>{{review.reviewDate}}</footer>
+        </div>
+    </div>
+
+    <div class="details" ng-show="bar.barReviews">        
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-6">
+                    <h5>Days Open</h5>
+                    <hr />
+                    <div id="daysOpen">
+                        <p ng-show="bar.barDetails.daysOpen.length === 0">Information Not Available</p>
+                        <p ng-repeat="dayOpen in bar.barDetails.daysOpen">{{dayOpen}}</p>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <h5>Additional Information</h5>
+                    <hr />
+                    <div id="barInfo">
+                        <p>Phone Number: {{bar.barDetails.phoneNumber === null ? "Not Available" : bar.barDetails.phoneNumber}}</p>
+                        <p>Average Price Level: {{bar.barDetails.priceLevel === 0 ? "Not Available" : bar.barDetails.priceLevel}}</p>
+                        <p>Average Rating: {{bar.barDetails.rating === 0 ? "Not Available or 0" : bar.barDetails.rating}}</p>
+                        <div ng-hide="bar.barDetails.daysOpen.length === 0">
+                            <p ng-show="bar.barDetails.isOpenNow" style="color: #5cb85c">Open Now!</p>
+                            <p ng-hide="bar.barDetails.isOpenNow" style="color: #DB4437">Closed</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-if="bar.currentBar">
+            <iframe width="600"
+                    height="450"
+                    frameborder="0" style="border:0;"
+                    ng-src="{{bar.googleMapsUrl}}" allowfullscreen></iframe>
+        </div>
+    </div>
+</main>

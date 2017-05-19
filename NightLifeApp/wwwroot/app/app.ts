@@ -2,5 +2,7 @@
 
 module app
 {
-    angular.module("NightLife", ["ngRoute", "angularModalService", "ngAnimate"]);
+    angular.module("helpfulUi", []);
+
+    angular.module("NightLife", ["ngRoute", "angularModalService", "ngAnimate", "helpfulUi"]);
 }

@@ -46,6 +46,7 @@ var app;
                 this.http = AppHttpService;
                 this.location = "";
                 this.isUserLoggedIn = false;
+                this.isBusy = false;
                 this.center = "center";
             }
             HomeController.prototype.clearResults = function () {
@@ -83,11 +84,14 @@ var app;
                                     return [2 /*return*/];
                                 }
                                 this.center = null;
+                                this.isBusy = true;
                                 return [4 /*yield*/, this.http.getBars(this.location)];
                             case 1:
                                 barResult = _a.sent();
                                 this.$scope.$apply(function () {
                                     _this.bars = barResult;
+                                    console.log(_this.bars);
+                                    _this.isBusy = false;
                                 });
                                 return [2 /*return*/];
                         }
@@ -123,7 +127,7 @@ var app;
                             case 1:
                                 rsvpResponse = _a.sent();
                                 if (rsvpResponse.redirectUrl) {
-                                    this.$window.location.href = rsvpResponse.redirectUrl;
+                                    //this.$window.location.href = rsvpResponse.redirectUrl;
                                     return [2 /*return*/];
                                 }
                                 this.$scope.$apply(function () {
@@ -139,16 +143,20 @@ var app;
                     });
                 });
             };
-            HomeController.prototype.showModal = function () {
+            HomeController.prototype.showRSVPModal = function (bar) {
                 var _this = this;
                 this.ModalService.showModal({
                     templateUrl: "/views/modal.html",
                     controller: "ModalController",
-                    controllerAs: "modal"
+                    controllerAs: "modal",
+                    inputs: {
+                        barId: bar.id
+                    }
                 }).then(function (modal) {
                     modal.element.modal();
-                    modal.close.then(function (result) {
-                        _this.message = "You said " + result;
+                    modal.close.then(function (barId) {
+                        //Let modal close, then reroute to page we want
+                        _this.$window.location.href = "/#!/details/" + barId + "/";
                     });
                 });
             };

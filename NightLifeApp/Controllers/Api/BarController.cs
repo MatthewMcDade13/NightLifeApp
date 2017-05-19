@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NightLifeApp.Controllers.Web;
 using NightLifeApp.Models;
+using NightLifeApp.Services;
+using NightLifeApp.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,9 +19,17 @@ namespace NightLifeApp.Controllers.Api
     {
         private INightLifeRepository repo;
         private UserManager<NightLifeUser> userManager;
+        private IHttpService http;
+        private IApiParser parser;
 
-        public BarController(INightLifeRepository repo, UserManager<NightLifeUser> userManager)
+        public BarController(
+            INightLifeRepository repo, 
+            UserManager<NightLifeUser> userManager,
+            IHttpService http,
+            IApiParser parser)
         {
+            this.http = http;
+            this.parser = parser;
             this.userManager = userManager;
             this.repo = repo;
         }
@@ -67,6 +78,35 @@ namespace NightLifeApp.Controllers.Api
                 await repo.SaveChangesAsync();
                 return Json(new { Subbed = true });
             }
+        }
+
+        //GET: api/bar/getusers/25
+        [HttpGet("getusers/{barId}")]
+        public IActionResult GetUsersForBar(int barId)
+        {
+            Bar bar = repo.GetBarById(barId);
+            IEnumerable<NightLifeUser> users = bar.RSVPs.Select(rsvp => rsvp.NightLifeUser);
+
+            return Json(Mapper.Map<IEnumerable<UserViewModel>>(users));
+        }
+
+        //GET: api/bar/getbar/25
+        [HttpGet("getbar/{barId}")]
+        public IActionResult GetBar(int barId)
+        {
+            Bar bar = repo.GetBarById(barId);
+
+            return Json(Mapper.Map<BarViewModel>(bar));
+        }
+
+        [HttpGet("details/{placeId}")]
+        public async Task<IActionResult> GetBarDetails(string placeId)
+        {
+            string jsonResponse = await http.GetBarDetails(placeId);
+
+            BarDetailsViewModel barDetails = parser.ParseGooglePlaceDetailsResponse(jsonResponse);
+
+            return Json(barDetails);
         }
     }
 }

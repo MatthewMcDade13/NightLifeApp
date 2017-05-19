@@ -7,9 +7,9 @@
     {
         bars: Array<Bar>;
         location: string;
-        message: string;
         center: string;
         isUserLoggedIn: boolean;
+        isBusy: boolean;
 
         http: AppHttpService;
             
@@ -25,6 +25,7 @@
             this.http = AppHttpService;
             this.location = "";
             this.isUserLoggedIn = false;
+            this.isBusy = false;
             this.center = "center";
         }
        
@@ -55,10 +56,14 @@
             }
 
             this.center = null;
+            this.isBusy = true;
+
             let barResult: Array<Bar> = await this.http.getBars(this.location);
             
             this.$scope.$apply(() => {                
-                this.bars = barResult;                
+                this.bars = barResult;
+                console.log(this.bars);
+                this.isBusy = false;
             });
         }
 
@@ -83,7 +88,7 @@
 
             if (rsvpResponse.redirectUrl)
             {
-                this.$window.location.href = rsvpResponse.redirectUrl;
+                //this.$window.location.href = rsvpResponse.redirectUrl;
                 return;
             }
 
@@ -98,20 +103,25 @@
                 }
             });
         }
-
-        showModal(): void
+        
+        showRSVPModal(bar: Bar): void
         {
             this.ModalService.showModal({
 
                 templateUrl: "/views/modal.html",
                 controller: "ModalController",
-                controllerAs: "modal"
+                controllerAs: "modal",
+                inputs: {
+                    barId: bar.id
+                }
 
             }).then(modal => {
 
                 modal.element.modal();
-                modal.close.then(result => {
-                    this.message = "You said " + result;
+                modal.close.then((barId) => {
+
+                    //Let modal close, then reroute to page we want
+                    this.$window.location.href = `/#!/details/${barId}/`;
                 });
             });
         }

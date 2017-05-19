@@ -1,16 +1,45 @@
 ﻿module app.controllers
 {
+    import AppHttpService = app.services.AppHttpService;
+    import NightLifeUser = app.models.NightLifeUser;
+
     export class ModalController
     {
-        static $inject = ["close"];
+        usersAttending: Array<NightLifeUser>;
 
-        constructor(public close: any)
+        barId: number;
+
+        http: AppHttpService;
+
+        static $inject = ["$scope", "$location", "close", "barId", "AppHttpService"];
+
+        constructor(
+            public $scope: angular.IScope,
+            public location: angular.ILocationService,
+            public close: any, barId: number,
+            AppHttpService: AppHttpService)
         {
+            this.http = AppHttpService;
+            
+            this.barId = barId;
+            console.log(this.barId);
+
+            this.getListOfUsersAttending();
         }
 
-        closeModal(result: any): void
+        closeModal(): void
         {
-            this.close(result, 500);
+            this.close(this.barId, 200);
+        }
+
+        private async getListOfUsersAttending(): Promise<void>
+        {
+            let userListResponse: Array<NightLifeUser> = await this.http.getListOfUsersAttending(this.barId);
+
+            this.$scope.$apply(() => {
+                this.usersAttending = userListResponse;
+                console.log(this.usersAttending);
+            });
         }
     }
 

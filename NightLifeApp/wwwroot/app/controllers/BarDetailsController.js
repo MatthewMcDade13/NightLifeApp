@@ -37,42 +37,66 @@ var app;
 (function (app) {
     var controllers;
     (function (controllers) {
-        var ModalController = (function () {
-            function ModalController($scope, location, close, barId, AppHttpService) {
+        var BarDetailsController = (function () {
+            function BarDetailsController($scope, route, $sce, http) {
                 this.$scope = $scope;
-                this.location = location;
-                this.close = close;
-                this.http = AppHttpService;
-                this.barId = barId;
-                console.log(this.barId);
-                this.getListOfUsersAttending();
+                this.route = route;
+                this.$sce = $sce;
+                this.http = http;
+                this.googleMapsUrl = "";
+                this.currentBar = null;
+                this.barDetails = null;
+                this.barReviews = null;
+                this.barId = route.barId;
             }
-            ModalController.prototype.closeModal = function () {
-                this.close(this.barId, 200);
-            };
-            ModalController.prototype.getListOfUsersAttending = function () {
+            BarDetailsController.prototype.getBar = function () {
                 return __awaiter(this, void 0, void 0, function () {
                     var _this = this;
-                    var userListResponse;
+                    var barResponse;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
-                            case 0: return [4 /*yield*/, this.http.getListOfUsersAttending(this.barId)];
+                            case 0: return [4 /*yield*/, this.http.getBarById(this.route.barId)];
                             case 1:
-                                userListResponse = _a.sent();
+                                barResponse = _a.sent();
                                 this.$scope.$apply(function () {
-                                    _this.usersAttending = userListResponse;
-                                    console.log(_this.usersAttending);
+                                    _this.currentBar = barResponse;
+                                    _this.buildGoogleMapsUrl();
+                                });
+                                return [4 /*yield*/, this.getBarDetails()];
+                            case 2:
+                                _a.sent();
+                                return [2 /*return*/];
+                        }
+                    });
+                });
+            };
+            BarDetailsController.prototype.getBarDetails = function () {
+                return __awaiter(this, void 0, void 0, function () {
+                    var _this = this;
+                    var barDetailsResponse;
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0: return [4 /*yield*/, this.http.getBarDetails(this.currentBar.placeId)];
+                            case 1:
+                                barDetailsResponse = _a.sent();
+                                this.$scope.$apply(function () {
+                                    _this.barDetails = barDetailsResponse;
+                                    _this.barReviews = _this.barDetails.reviews;
                                 });
                                 return [2 /*return*/];
                         }
                     });
                 });
             };
-            return ModalController;
+            BarDetailsController.prototype.buildGoogleMapsUrl = function () {
+                this.googleMapsUrl =
+                    this.$sce.trustAsResourceUrl("https://www.google.com/maps/embed/v1/place?key=AIzaSyBHRvkSXOKkaQODQpLKa_-NG3DMEL7xNMc&q=" + this.currentBar.address);
+            };
+            return BarDetailsController;
         }());
-        ModalController.$inject = ["$scope", "$location", "close", "barId", "AppHttpService"];
-        controllers.ModalController = ModalController;
-        angular.module("NightLife").controller("ModalController", ModalController);
+        BarDetailsController.$inject = ["$scope", "$routeParams", "$sce", "AppHttpService"];
+        controllers.BarDetailsController = BarDetailsController;
+        angular.module("NightLife").controller("BarDetailsController", BarDetailsController);
     })(controllers = app.controllers || (app.controllers = {}));
 })(app || (app = {}));
-//# sourceMappingURL=ModalController.js.map
+//# sourceMappingURL=BarDetailsController.js.map

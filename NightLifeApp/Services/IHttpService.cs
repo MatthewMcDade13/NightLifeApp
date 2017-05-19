@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NightLifeApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,8 @@ namespace NightLifeApp.Services
         Task<string> GetNearbyBars(float latitude, float longitude);
 
         Task<Byte[]> GetBarPhoto(string photoReference);
+
+        Task<string> GetBarDetails(string placeId);
 
         Task<string> GetCoordinates(string location);
     }

@@ -1,6 +1,7 @@
 ﻿module app.services
 {
     import Bar = app.models.Bar;
+    import BarDetails = app.models.BarDetails;
     import NightLifeUser = app.models.NightLifeUser;
 
     export class AppHttpService
@@ -28,6 +29,22 @@
                 });
         }
 
+        async getBarById(barId: number|string): Promise<Bar>
+        {
+            return this.$http.get(`/api/bar/getbar/${barId}`)
+                .then(response => {
+                    return <Bar>response.data;
+                });
+        }
+
+        async getBarDetails(placeId: string): Promise<BarDetails>
+        {
+            return this.$http.get(`/api/bar/details/${placeId}`)
+                .then(response => {
+                    return <BarDetails>response.data;
+                });
+        }
+
         async getLastSearch(): Promise<string>
         {
             return this.$http.get("/api/search/last")
@@ -42,6 +59,14 @@
            return this.$http.put(`/api/bar/sub/${barId}`, null)
                 .then(response => {
                     return response.data;
+                });
+        }
+
+        async getListOfUsersAttending(barId: number): Promise<Array<NightLifeUser>>
+        {
+            return this.$http.get(`/api/bar/getusers/${barId}`)
+                .then(response => {
+                    return <Array<NightLifeUser>>response.data;
                 });
         }
     }
