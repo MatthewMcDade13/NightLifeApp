@@ -5,6 +5,10 @@
     <UserSecretsId>ef27a4ab-ae46-4788-8677-40b9e9d9d029</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Include="wwwroot\app\controllers\BarDetailsController.ts" />
+  </ItemGroup>
+
   
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.0.2" />
@@ -26,3 +30,29 @@
   </ItemGroup>
 
 </Project>
+
+<!--<ItemGroup>
+  <Content Include="wwwroot\app\app.ts" />
+  <Content Include="wwwroot\app\config.ts" />
+  <Content Include="wwwroot\app\controllers\BarDetailsController.ts" />
+  <Content Include="wwwroot\app\controllers\HomeController.ts" />
+  <Content Include="wwwroot\app\controllers\ModalController.ts" />
+  <Content Include="wwwroot\app\directives\spinner.ts" />
+  <Content Include="wwwroot\app\models\Bar.ts" />
+  <Content Include="wwwroot\app\models\BarDetails.ts" />
+  <Content Include="wwwroot\app\models\BarReview.ts" />
+  <Content Include="wwwroot\app\models\NightLifeUser.ts" />
+  <Content Include="wwwroot\app\services\AppHttpService.ts" />
+  <Content Include="wwwroot\app\services\StyleService.ts" />
+  <Content Include="wwwroot\app\tsconfig.json">
+    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+  </Content>
+  <Content Include="wwwroot\background.jpg" />
+  <Content Include="wwwroot\css\site.css" />
+  <Content Include="wwwroot\scripts\facebookButton.js" />
+  <Content Include="wwwroot\scripts\tooltips.js" />
+  <Content Include="wwwroot\views\bardetails.html" />
+  <Content Include="wwwroot\views\home.html" />
+  <Content Include="wwwroot\views\modal.html" />
+  <Content Include="wwwroot\views\spinner.html" />
+</ItemGroup>-->
