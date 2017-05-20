@@ -48,6 +48,7 @@ var app;
                 this.location = "";
                 this.isUserLoggedIn = false;
                 this.isBusy = false;
+                this.currentUser = null;
                 this.centerCssClass = "center";
             }
             HomeController.prototype.clearResults = function () {
@@ -55,6 +56,25 @@ var app;
                     this.bars = null;
                     this.centerCssClass = "center";
                 }
+            };
+            HomeController.prototype.getPageData = function () {
+                return __awaiter(this, void 0, void 0, function () {
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0:
+                                this.isBusy = true;
+                                return [4 /*yield*/, this.getUserIsAuthenticated()];
+                            case 1:
+                                _a.sent();
+                                return [4 /*yield*/, this.getCurrentUser()];
+                            case 2:
+                                _a.sent();
+                                this.isBusy = false;
+                                this.getLastSearch();
+                                return [2 /*return*/];
+                        }
+                    });
+                });
             };
             HomeController.prototype.getUserData = function () {
                 return __awaiter(this, void 0, void 0, function () {
@@ -140,11 +160,14 @@ var app;
                     var lastSearchResponse;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
-                            case 0: return [4 /*yield*/, this.http.getLastSearch()];
+                            case 0:
+                                console.log("getting last search");
+                                return [4 /*yield*/, this.http.getLastSearch()];
                             case 1:
                                 lastSearchResponse = _a.sent();
                                 this.$scope.$apply(function () {
                                     _this.location = lastSearchResponse;
+                                    console.log("location: " + _this.location);
                                     if (_this.location !== null) {
                                         _this.getBars();
                                     }

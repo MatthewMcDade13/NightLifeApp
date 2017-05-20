@@ -30,6 +30,7 @@
             this.location = "";
             this.isUserLoggedIn = false;
             this.isBusy = false;
+            this.currentUser = null;
             this.centerCssClass = "center";
         }
        
@@ -40,6 +41,15 @@
                 this.bars = null;
                 this.centerCssClass = "center";
             }
+        }
+
+        async getPageData(): Promise<void> {
+            this.isBusy = true;
+            await this.getUserIsAuthenticated();
+            await this.getCurrentUser();
+
+            this.isBusy = false;
+            this.getLastSearch();
         }
 
         async getUserData(): Promise<void>
@@ -103,11 +113,13 @@
 
         async getLastSearch(): Promise<void>
         {
+            console.log("getting last search");
 
             let lastSearchResponse: string = await this.http.getLastSearch();
 
             this.$scope.$apply(() => {
                 this.location = lastSearchResponse;
+                console.log("location: " + this.location);
 
                 if (this.location !== null)
                 {
