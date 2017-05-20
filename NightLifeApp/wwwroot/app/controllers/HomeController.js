@@ -62,27 +62,15 @@ var app;
                 return __awaiter(this, void 0, void 0, function () {
                     return __generator(this, function (_a) {
                         switch (_a.label) {
-                            case 0:
-                                this.isBusy = true;
-                                return [4 /*yield*/, this.getUserIsAuthenticated()];
+                            case 0: return [4 /*yield*/, this.getUserIsAuthenticated()];
                             case 1:
                                 _a.sent();
                                 return [4 /*yield*/, this.getCurrentUser()];
                             case 2:
                                 _a.sent();
-                                this.isBusy = false;
                                 this.getLastSearch();
                                 return [2 /*return*/];
                         }
-                    });
-                });
-            };
-            HomeController.prototype.getUserData = function () {
-                return __awaiter(this, void 0, void 0, function () {
-                    return __generator(this, function (_a) {
-                        this.getUserIsAuthenticated();
-                        this.getCurrentUser();
-                        return [2 /*return*/];
                     });
                 });
             };

@@ -46,19 +46,10 @@
 
         async getPageData(): Promise<void>
         {
-
-            this.isBusy = true;
             await this.getUserIsAuthenticated();
             await this.getCurrentUser();
 
-            this.isBusy = false;
             this.getLastSearch();
-        }
-
-        async getUserData(): Promise<void>
-        {
-            this.getUserIsAuthenticated();
-            this.getCurrentUser();
         }
 
         private async getCurrentUser(): Promise<void>
