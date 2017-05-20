@@ -37,7 +37,6 @@
 
             this.$scope.$apply(() => {
                 this.usersAttending = userListResponse;
-                console.log(this.usersAttending);
             });
         }
     }

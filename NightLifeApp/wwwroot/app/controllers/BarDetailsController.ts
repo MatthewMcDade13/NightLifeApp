@@ -36,13 +36,6 @@
             this.isBusy = true;
             let barResponse = await this.http.getBarById(this.route.barId);
 
-            //TODO: Remove this after finding bug
-            if (barResponse === null)
-            {
-                console.log("Bar response:");
-                console.log(barResponse);
-            }
-
             this.$scope.$apply(() => {
                 this.currentBar = barResponse;
                 this.buildGoogleMapsUrl();

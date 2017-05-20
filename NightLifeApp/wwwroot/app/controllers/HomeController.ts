@@ -31,6 +31,7 @@
             this.isUserLoggedIn = false;
             this.isBusy = false;
             this.centerCssClass = "center";
+            this.currentUser = null;
         }
        
         clearResults()
@@ -54,7 +55,6 @@
 
             this.$scope.$apply(() => {
                 this.currentUser = currentUserResponse;
-                console.log(this.currentUser);
             });
         }
 
@@ -82,7 +82,6 @@
             
             this.$scope.$apply(() => {                
                 this.bars = barResult;
-                console.log(this.bars);
 
                 //Make sure we have gotten data from User Api successfully before we style buttons,
                 //If for some reason we did not, just use a default style

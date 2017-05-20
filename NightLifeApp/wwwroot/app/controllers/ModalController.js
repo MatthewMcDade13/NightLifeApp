@@ -60,7 +60,6 @@ var app;
                                 userListResponse = _a.sent();
                                 this.$scope.$apply(function () {
                                     _this.usersAttending = userListResponse;
-                                    console.log(_this.usersAttending);
                                 });
                                 return [2 /*return*/];
                         }

@@ -41,12 +41,6 @@
         {
             return this.$http.get(`/api/bar/getbar/${barId}`)
                 .then(response => {
-                    //TODO: remove this when found bug
-                    if (response.data === null)
-                    {
-                        console.log("Response.data: ");
-                        console.log(response.data);
-                    }
 
                     return <Bar>response.data;
                 });

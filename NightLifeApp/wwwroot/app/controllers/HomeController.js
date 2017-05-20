@@ -49,6 +49,7 @@ var app;
                 this.isUserLoggedIn = false;
                 this.isBusy = false;
                 this.centerCssClass = "center";
+                this.currentUser = null;
             }
             HomeController.prototype.clearResults = function () {
                 if (this.location === "") {
@@ -76,7 +77,6 @@ var app;
                                 currentUserResponse = _a.sent();
                                 this.$scope.$apply(function () {
                                     _this.currentUser = currentUserResponse;
-                                    console.log(_this.currentUser);
                                 });
                                 return [2 /*return*/];
                         }
@@ -118,7 +118,6 @@ var app;
                                 barResult = _a.sent();
                                 this.$scope.$apply(function () {
                                     _this.bars = barResult;
-                                    console.log(_this.bars);
                                     //Make sure we have gotten data from User Api successfully before we style buttons,
                                     //If for some reason we did not, just use a default style
                                     if (_this.currentUser !== null) {

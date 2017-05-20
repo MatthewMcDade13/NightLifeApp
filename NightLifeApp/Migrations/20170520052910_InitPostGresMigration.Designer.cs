@@ -8,9 +8,10 @@ using NightLifeApp.Models;
 namespace NightLifeApp.Migrations
 {
     [DbContext(typeof(NightLifeContext))]
-    partial class NightLifeContextModelSnapshot : ModelSnapshot
+    [Migration("20170520052910_InitPostGresMigration")]
+    partial class InitPostGresMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)

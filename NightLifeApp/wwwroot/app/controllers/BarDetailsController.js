@@ -61,11 +61,6 @@ var app;
                                 return [4 /*yield*/, this.http.getBarById(this.route.barId)];
                             case 1:
                                 barResponse = _a.sent();
-                                //TODO: Remove this after finding bug
-                                if (barResponse === null) {
-                                    console.log("Bar response:");
-                                    console.log(barResponse);
-                                }
                                 this.$scope.$apply(function () {
                                     _this.currentBar = barResponse;
                                     _this.buildGoogleMapsUrl();

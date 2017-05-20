@@ -77,11 +77,6 @@ var app;
                     return __generator(this, function (_a) {
                         return [2 /*return*/, this.$http.get("/api/bar/getbar/" + barId)
                                 .then(function (response) {
-                                //TODO: remove this when found bug
-                                if (response.data === null) {
-                                    console.log("Response.data: ");
-                                    console.log(response.data);
-                                }
                                 return response.data;
                             })];
                     });
