@@ -57,7 +57,7 @@
                 console.log("exception:");
                 console.log(exception);
                 console.log("bar id in route:");
-                console.log(this.route.barId);
+                console.log(Object.getOwnPropertyNames(this.route.barId));
                 console.log("current bar");
                 console.log(this.currentBar);
             }                        
