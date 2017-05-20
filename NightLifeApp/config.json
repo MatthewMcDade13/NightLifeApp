@@ -1,5 +1,5 @@
 ﻿{
   "Data": {
-    "ConnectionString": "Server=(localdb)\\MSSQLLocalDB;Database=NighLifeDb;MultipleActiveResultSets=true;"
+    "ConnectionString": "Database=d7opb7dosqov4k;Host=ec2-23-21-76-49.compute-1.amazonaws.com;port=5432;user id=qzgbezwjajinmr;password=cad7698d5c7dd7d67a5e867cc25d48c191a1648802e02249e713a433fad7ae5e;sslmode=Require;Trust Server Certificate=true"
   }
 }

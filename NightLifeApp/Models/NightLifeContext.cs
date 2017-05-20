@@ -25,7 +25,7 @@ namespace NightLifeApp.Models
         {
             base.OnConfiguring(optionsBuilder);
 
-            optionsBuilder.UseSqlServer(config["Data:ConnectionString"]);
+            optionsBuilder.UseNpgsql(config["Data:ConnectionString"]);
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
