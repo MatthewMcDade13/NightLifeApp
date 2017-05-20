@@ -59,7 +59,6 @@ var app;
             };
             HomeController.prototype.getPageData = function () {
                 return __awaiter(this, void 0, void 0, function () {
-                    var _this = this;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
@@ -70,10 +69,8 @@ var app;
                                 return [4 /*yield*/, this.getCurrentUser()];
                             case 2:
                                 _a.sent();
-                                this.$scope.$apply(function () {
-                                    _this.isBusy = false;
-                                    _this.getLastSearch();
-                                });
+                                this.isBusy = false;
+                                this.getLastSearch();
                                 return [2 /*return*/];
                         }
                     });

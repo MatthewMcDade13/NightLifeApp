@@ -43,16 +43,13 @@
             }
         }
 
-        async getPageData(): Promise<void>
-        {
+        async getPageData(): Promise<void> {
             this.isBusy = true;
             await this.getUserIsAuthenticated();
             await this.getCurrentUser();
-            
-            this.$scope.$apply(() => {
-                this.isBusy = false;
-                this.getLastSearch();
-            });            
+
+            this.isBusy = false;
+            this.getLastSearch();
         }
 
         async getUserData(): Promise<void>
