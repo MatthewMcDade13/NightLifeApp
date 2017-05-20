@@ -22,7 +22,6 @@
             this.http = AppHttpService;
             
             this.barId = barId;
-            console.log(this.barId);
 
             this.getListOfUsersAttending();
         }

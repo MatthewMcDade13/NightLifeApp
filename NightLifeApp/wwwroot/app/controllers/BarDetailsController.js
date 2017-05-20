@@ -47,6 +47,7 @@ var app;
                 this.currentBar = null;
                 this.barDetails = null;
                 this.barReviews = null;
+                this.isBusy = false;
                 this.barId = route.barId;
             }
             BarDetailsController.prototype.getBar = function () {
@@ -55,9 +56,16 @@ var app;
                     var barResponse;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
-                            case 0: return [4 /*yield*/, this.http.getBarById(this.route.barId)];
+                            case 0:
+                                this.isBusy = true;
+                                return [4 /*yield*/, this.http.getBarById(this.route.barId)];
                             case 1:
                                 barResponse = _a.sent();
+                                //TODO: Remove this after finding bug
+                                if (barResponse === null) {
+                                    console.log("Bar response:");
+                                    console.log(barResponse);
+                                }
                                 this.$scope.$apply(function () {
                                     _this.currentBar = barResponse;
                                     _this.buildGoogleMapsUrl();
@@ -73,15 +81,29 @@ var app;
             BarDetailsController.prototype.getBarDetails = function () {
                 return __awaiter(this, void 0, void 0, function () {
                     var _this = this;
-                    var barDetailsResponse;
+                    var barDetailsResponse, exception_1;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
-                            case 0: return [4 /*yield*/, this.http.getBarDetails(this.currentBar.placeId)];
+                            case 0:
+                                _a.trys.push([0, 2, , 3]);
+                                return [4 /*yield*/, this.http.getBarDetails(this.currentBar.placeId)];
                             case 1:
                                 barDetailsResponse = _a.sent();
+                                return [3 /*break*/, 3];
+                            case 2:
+                                exception_1 = _a.sent();
+                                console.log("exception:");
+                                console.log(exception_1);
+                                console.log("bar id in route:");
+                                console.log(this.route.barId);
+                                console.log("current bar");
+                                console.log(this.currentBar);
+                                return [3 /*break*/, 3];
+                            case 3:
                                 this.$scope.$apply(function () {
                                     _this.barDetails = barDetailsResponse;
                                     _this.barReviews = _this.barDetails.reviews;
+                                    _this.isBusy = false;
                                 });
                                 return [2 /*return*/];
                         }

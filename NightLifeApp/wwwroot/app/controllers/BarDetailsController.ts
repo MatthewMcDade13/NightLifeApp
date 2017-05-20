@@ -12,6 +12,7 @@
 
         googleMapsUrl: string;
         barId: number | string;
+        isBusy: boolean;
         currentBar: Bar;
         barDetails: BarDetails;
         barReviews: Array<BarReview>;
@@ -26,15 +27,24 @@
             this.currentBar = null;
             this.barDetails = null;
             this.barReviews = null;
+            this.isBusy = false;
             this.barId = route.barId;
         }
 
         async getBar(): Promise<void>
         {
+            this.isBusy = true;
             let barResponse = await this.http.getBarById(this.route.barId);
-            
+
+            //TODO: Remove this after finding bug
+            if (barResponse === null)
+            {
+                console.log("Bar response:");
+                console.log(barResponse);
+            }
+
             this.$scope.$apply(() => {
-                this.currentBar = barResponse;                
+                this.currentBar = barResponse;
                 this.buildGoogleMapsUrl();
             });
 
@@ -43,11 +53,26 @@
 
         private async getBarDetails(): Promise<void>
         {
-            let barDetailsResponse = await this.http.getBarDetails(this.currentBar.placeId);
+            //TODO: See if we can catch bar not loading properly on bardetails page while still in development
+            //If not, remove this try catch block or at least add some data to display error in HTML
+            try
+            {
+                var barDetailsResponse = await this.http.getBarDetails(this.currentBar.placeId);
+            }
+            catch (exception)
+            {
+                console.log("exception:");
+                console.log(exception);
+                console.log("bar id in route:");
+                console.log(this.route.barId);
+                console.log("current bar");
+                console.log(this.currentBar);
+            }                        
 
             this.$scope.$apply(() => {
                 this.barDetails = barDetailsResponse;
                 this.barReviews = this.barDetails.reviews;
+                this.isBusy = false;
             });
         }
 

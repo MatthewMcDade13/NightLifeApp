@@ -44,7 +44,6 @@ var app;
                 this.close = close;
                 this.http = AppHttpService;
                 this.barId = barId;
-                console.log(this.barId);
                 this.getListOfUsersAttending();
             }
             ModalController.prototype.closeModal = function () {

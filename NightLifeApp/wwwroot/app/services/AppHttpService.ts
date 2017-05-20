@@ -21,6 +21,14 @@
                 });
         }
 
+        async getCurrentUser(): Promise<NightLifeUser>
+        {
+            return this.$http.get("/api/user/getUser")
+                .then(response => {
+                    return <NightLifeUser>response.data;
+                });
+        }
+
         async getBars(location: string): Promise<Array<Bar>>
         {
            return this.$http.get(`/api/search/nearby?location=${location}`)
@@ -33,6 +41,13 @@
         {
             return this.$http.get(`/api/bar/getbar/${barId}`)
                 .then(response => {
+                    //TODO: remove this when found bug
+                    if (response.data === null)
+                    {
+                        console.log("Response.data: ");
+                        console.log(response.data);
+                    }
+
                     return <Bar>response.data;
                 });
         }

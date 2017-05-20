@@ -1,32 +1,36 @@
 ﻿module app.controllers
 {
     import Bar = app.models.Bar;
+    import NightLifeUser = app.models.NightLifeUser;
     import AppHttpService = app.services.AppHttpService;
+    import StyleService = app.services.StyleService;
 
     export class HomeController
     {
         bars: Array<Bar>;
+        currentUser: NightLifeUser;
         location: string;
-        center: string;
+        centerCssClass: string;
         isUserLoggedIn: boolean;
         isBusy: boolean;
 
         http: AppHttpService;
             
-        static $inject = ["$scope", "$http", "$window", "ModalService" ,"AppHttpService"];
+        static $inject = ["$scope", "$http", "$window", "ModalService", "AppHttpService", "StyleService"];
 
         constructor(
             public $scope: angular.IScope,
             public $http: angular.IHttpService,
             public $window: angular.IWindowService,
             public ModalService: any,
-            AppHttpService: AppHttpService)
+            AppHttpService: AppHttpService,
+            public style: StyleService)
         {
             this.http = AppHttpService;
             this.location = "";
             this.isUserLoggedIn = false;
             this.isBusy = false;
-            this.center = "center";
+            this.centerCssClass = "center";
         }
        
         clearResults()
@@ -34,13 +38,29 @@
             if (this.location === "")
             {
                 this.bars = null;
-                this.center = "center";
+                this.centerCssClass = "center";
             }
         }
 
-        async getUserIsAuthenticated(): Promise<void>
+        async getUserData(): Promise<void>
         {
-            let userResponse = await this.http.getUserIsAuthenticated();
+            this.getUserIsAuthenticated();
+            this.getCurrentUser();
+        }
+
+        private async getCurrentUser(): Promise<void>
+        {
+            let currentUserResponse: NightLifeUser = await this.http.getCurrentUser();
+
+            this.$scope.$apply(() => {
+                this.currentUser = currentUserResponse;
+                console.log(this.currentUser);
+            });
+        }
+
+        private async getUserIsAuthenticated(): Promise<void>
+        {
+            let userResponse: boolean = await this.http.getUserIsAuthenticated();
 
             this.$scope.$apply(() => {
                 this.isUserLoggedIn = userResponse;
@@ -55,7 +75,7 @@
                 return;
             }
 
-            this.center = null;
+            this.centerCssClass = null;
             this.isBusy = true;
 
             let barResult: Array<Bar> = await this.http.getBars(this.location);
@@ -63,14 +83,28 @@
             this.$scope.$apply(() => {                
                 this.bars = barResult;
                 console.log(this.bars);
+
+                //Make sure we have gotten data from User Api successfully before we style buttons,
+                //If for some reason we did not, just use a default style
+                if (this.currentUser !== null)
+                {
+                    this.style.setRSVPButtonStyle(this.currentUser, this.bars);
+                }
+                else
+                {
+                    this.style.setDefaultRSVPButtonStyle(this.bars);
+                }
+
                 this.isBusy = false;
             });
+
+            
         }
 
         async getLastSearch(): Promise<void>
         {
 
-            let lastSearchResponse = await this.http.getLastSearch();
+            let lastSearchResponse: string = await this.http.getLastSearch();
 
             this.$scope.$apply(() => {
                 this.location = lastSearchResponse;
@@ -88,7 +122,6 @@
 
             if (rsvpResponse.redirectUrl)
             {
-                //this.$window.location.href = rsvpResponse.redirectUrl;
                 return;
             }
 
@@ -96,10 +129,14 @@
                 if (rsvpResponse.subbed)
                 {
                     bar.numberOfPeopleAttending++;
+                    bar.RSVPButtonStyle = "btn-danger";
+                    bar.RSVPButtonText = "Im Not Going."
                 }
                 else
                 {
                     bar.numberOfPeopleAttending--;
+                    bar.RSVPButtonStyle = "btn-success";
+                    bar.RSVPButtonText = "Im Going!";
                 }
             });
         }
@@ -118,7 +155,7 @@
             }).then(modal => {
 
                 modal.element.modal();
-                modal.close.then((barId) => {
+                modal.close.then((barId: number) => {
 
                     //Let modal close, then reroute to page we want
                     this.$window.location.href = `/#!/details/${barId}/`;

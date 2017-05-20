@@ -1,7 +1,7 @@
 ﻿<main>
-    <div ng-init="home.getLastSearch(); home.getUserIsAuthenticated();"></div>
+    <div ng-init="home.getLastSearch(); home.getUserData();"></div>
 
-    <form ng-submit="home.getBars()" ng-class="home.center">
+    <form ng-submit="home.getBars()" ng-class="home.centerCssClass">
         <div class="form-group">
             <input id="barSearchInput" class="form-control text-center" type="text" name="Location"
                    value="Location" ng-model="home.location" ng-change="home.clearResults()"
@@ -10,7 +10,10 @@
     </form>
     <spinner message="Getting Results for {{home.location}}" ng-show="home.isBusy"></spinner>
     <div id="barList">
-        <h3 ng-show="home.bars" style="text-align: center;">{{home.location}}</h3>
+        <div id="barListHeader" ng-show="home.bars">
+            <h3><strong>Drink Responsibly!</strong></h3>
+            <hr />
+        </div>
         <div class="container-fluid">
             <h1>{{home.bars.length === 0 ? "No Search Results for " + home.location : null}}</h1>
             <div class="row">
@@ -23,15 +26,23 @@
                             <button style="margin-bottom: 15px;" class="btn btn-info" ng-click="home.showRSVPModal(bar)">
                                 People Attending: {{bar.numberOfPeopleAttending}}
                             </button>
-                            <div class="tooltipWrapper" data-placement="bottom"
-                                 title="You must be logged in to RSVP!"
-                                 data-animation="false"
-                                 onmouseenter="$(this).tooltip('show')">
-                                <button ng-hide="home.isUserLoggedIn" class="btn btn-outline-success" disabled>
-                                    Im Going!
-                                </button>
+                            <div class="row">
+                                <div class="col-7" style="margin-left: -5px;">
+                                    <div class="tooltipWrapper" data-placement="bottom"
+                                         title="You must be logged in to RSVP!"
+                                         data-animation="false"
+                                         onmouseenter="$(this).tooltip('show')">
+                                        <button ng-hide="home.isUserLoggedIn" class="btn btn-outline-success" disabled>
+                                            Im Going!
+                                        </button>
+                                    </div>
+                                    <button ng-show="home.isUserLoggedIn" ng-click="home.rsvpToBar(bar)" 
+                                            class="btn" ng-class="bar.RSVPButtonStyle">{{bar.RSVPButtonText}}</button>
+                                </div>
+                                <div class="col-3">
+                                    <a class="btn btn-primary" ng-href="/#!/details/{{bar.id}}">Details</a>
+                                </div>
                             </div>
-                            <button ng-show="home.isUserLoggedIn" ng-click="home.rsvpToBar(bar)" class="btn btn-primary">Im Going!</button>
                         </div>
                     </div>
                 </div>

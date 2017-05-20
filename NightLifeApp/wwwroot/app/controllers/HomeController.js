@@ -38,22 +38,50 @@ var app;
     var controllers;
     (function (controllers) {
         var HomeController = (function () {
-            function HomeController($scope, $http, $window, ModalService, AppHttpService) {
+            function HomeController($scope, $http, $window, ModalService, AppHttpService, style) {
                 this.$scope = $scope;
                 this.$http = $http;
                 this.$window = $window;
                 this.ModalService = ModalService;
+                this.style = style;
                 this.http = AppHttpService;
                 this.location = "";
                 this.isUserLoggedIn = false;
                 this.isBusy = false;
-                this.center = "center";
+                this.centerCssClass = "center";
             }
             HomeController.prototype.clearResults = function () {
                 if (this.location === "") {
                     this.bars = null;
-                    this.center = "center";
+                    this.centerCssClass = "center";
                 }
+            };
+            HomeController.prototype.getUserData = function () {
+                return __awaiter(this, void 0, void 0, function () {
+                    return __generator(this, function (_a) {
+                        this.getUserIsAuthenticated();
+                        this.getCurrentUser();
+                        return [2 /*return*/];
+                    });
+                });
+            };
+            HomeController.prototype.getCurrentUser = function () {
+                return __awaiter(this, void 0, void 0, function () {
+                    var _this = this;
+                    var currentUserResponse;
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0: return [4 /*yield*/, this.http.getCurrentUser()];
+                            case 1:
+                                currentUserResponse = _a.sent();
+                                this.$scope.$apply(function () {
+                                    _this.currentUser = currentUserResponse;
+                                    console.log(_this.currentUser);
+                                });
+                                return [2 /*return*/];
+                        }
+                    });
+                });
             };
             HomeController.prototype.getUserIsAuthenticated = function () {
                 return __awaiter(this, void 0, void 0, function () {
@@ -83,7 +111,7 @@ var app;
                                     this.bars = null;
                                     return [2 /*return*/];
                                 }
-                                this.center = null;
+                                this.centerCssClass = null;
                                 this.isBusy = true;
                                 return [4 /*yield*/, this.http.getBars(this.location)];
                             case 1:
@@ -91,6 +119,14 @@ var app;
                                 this.$scope.$apply(function () {
                                     _this.bars = barResult;
                                     console.log(_this.bars);
+                                    //Make sure we have gotten data from User Api successfully before we style buttons,
+                                    //If for some reason we did not, just use a default style
+                                    if (_this.currentUser !== null) {
+                                        _this.style.setRSVPButtonStyle(_this.currentUser, _this.bars);
+                                    }
+                                    else {
+                                        _this.style.setDefaultRSVPButtonStyle(_this.bars);
+                                    }
                                     _this.isBusy = false;
                                 });
                                 return [2 /*return*/];
@@ -127,15 +163,18 @@ var app;
                             case 1:
                                 rsvpResponse = _a.sent();
                                 if (rsvpResponse.redirectUrl) {
-                                    //this.$window.location.href = rsvpResponse.redirectUrl;
                                     return [2 /*return*/];
                                 }
                                 this.$scope.$apply(function () {
                                     if (rsvpResponse.subbed) {
                                         bar.numberOfPeopleAttending++;
+                                        bar.RSVPButtonStyle = "btn-danger";
+                                        bar.RSVPButtonText = "Im Not Going.";
                                     }
                                     else {
                                         bar.numberOfPeopleAttending--;
+                                        bar.RSVPButtonStyle = "btn-success";
+                                        bar.RSVPButtonText = "Im Going!";
                                     }
                                 });
                                 return [2 /*return*/];
@@ -162,7 +201,7 @@ var app;
             };
             return HomeController;
         }());
-        HomeController.$inject = ["$scope", "$http", "$window", "ModalService", "AppHttpService"];
+        HomeController.$inject = ["$scope", "$http", "$window", "ModalService", "AppHttpService", "StyleService"];
         controllers.HomeController = HomeController;
         angular.module("NightLife").controller("HomeController", HomeController);
     })(controllers = app.controllers || (app.controllers = {}));

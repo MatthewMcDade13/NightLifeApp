@@ -10,4 +10,4 @@ var app;
         models.Bar = Bar;
     })(models = app.models || (app.models = {}));
 })(app || (app = {}));
-//# sourceMappingURL=bar.js.map
+//# sourceMappingURL=Bar.js.map

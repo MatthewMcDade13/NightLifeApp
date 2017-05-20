@@ -21,13 +21,14 @@ namespace NightLifeApp.Controllers.Api
             this.userManager = userManager;
         }
 
-
+        //GET: api/user/isAuth
         [HttpGet("isAuth")]
         public IActionResult IsUserAuthenticated()
         {
             return Json(new { IsLoggedIn = User.Identity.IsAuthenticated });
         }
 
+        //GET: api/user/getUser
         [HttpGet("getUser")]
         [Authorize]
         public async Task<IActionResult> GetUserData()
