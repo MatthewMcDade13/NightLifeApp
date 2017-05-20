@@ -72,10 +72,8 @@ var app;
                                 _a.sent();
                                 this.$scope.$apply(function () {
                                     _this.isBusy = false;
+                                    _this.getLastSearch();
                                 });
-                                return [4 /*yield*/, this.getLastSearch()];
-                            case 3:
-                                _a.sent();
                                 return [2 /*return*/];
                         }
                     });

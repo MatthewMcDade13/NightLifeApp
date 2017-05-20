@@ -51,9 +51,8 @@
             
             this.$scope.$apply(() => {
                 this.isBusy = false;
-            });
-
-            await this.getLastSearch();
+                this.getLastSearch();
+            });            
         }
 
         async getUserData(): Promise<void>
