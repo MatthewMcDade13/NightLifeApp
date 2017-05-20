@@ -70,6 +70,9 @@ namespace NightLifeApp.Controllers.Web
             }
             else
             {
+                //Clear auth cookies to make sure we create and sign in the user correctly
+                await signInManager.SignOutAsync();
+
                 string facebookId = null;
 
                 if (info.LoginProvider == "Facebook")
@@ -98,10 +101,7 @@ namespace NightLifeApp.Controllers.Web
                         return RedirectToLocal(returnUrl);
                     }
                 }
-
-                //Sign the user out to avoid any wierdness with Authentication
-                await signInManager.SignOutAsync();
-
+                
                 //If we have gotten this far, the user has logged in with a different social media account.
                 return RedirectToAction(nameof(HomeController.Index), "Home", new { message = "The given email address is already in use. Try logging in with a different provider" });
             }

@@ -30,16 +30,20 @@ namespace NightLifeApp.Controllers.Api
 
         //GET: api/user/getUser
         [HttpGet("getUser")]
-        [Authorize]
         public async Task<IActionResult> GetUserData()
         {
-            NightLifeUser user = await userManager.GetUserAsync(User);
-
-            return Json(new UserViewModel()
+            if (User.Identity.IsAuthenticated)
             {
-                Name = user.Name,
-                Email = user.Email
-            });
+                NightLifeUser user = await userManager.GetUserAsync(User);
+
+                return Json(new UserViewModel()
+                {
+                    Name = user.Name,
+                    Email = user.Email
+                });
+            }
+
+            return Json(null);            
         }
     }
 }

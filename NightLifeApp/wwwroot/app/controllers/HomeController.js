@@ -159,14 +159,11 @@ var app;
                     var lastSearchResponse;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
-                            case 0:
-                                console.log("getting last search");
-                                return [4 /*yield*/, this.http.getLastSearch()];
+                            case 0: return [4 /*yield*/, this.http.getLastSearch()];
                             case 1:
                                 lastSearchResponse = _a.sent();
                                 this.$scope.$apply(function () {
                                     _this.location = lastSearchResponse;
-                                    console.log("location: " + _this.location);
                                     if (_this.location !== null) {
                                         _this.getBars();
                                     }

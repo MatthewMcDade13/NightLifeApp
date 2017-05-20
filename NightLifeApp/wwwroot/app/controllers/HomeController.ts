@@ -44,7 +44,9 @@
             }
         }
 
-        async getPageData(): Promise<void> {
+        async getPageData(): Promise<void>
+        {
+
             this.isBusy = true;
             await this.getUserIsAuthenticated();
             await this.getCurrentUser();
@@ -112,13 +114,10 @@
 
         async getLastSearch(): Promise<void>
         {
-            console.log("getting last search");
-
             let lastSearchResponse: string = await this.http.getLastSearch();
 
             this.$scope.$apply(() => {
                 this.location = lastSearchResponse;
-                console.log("location: " + this.location);
 
                 if (this.location !== null)
                 {
