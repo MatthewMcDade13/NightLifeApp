@@ -84,6 +84,7 @@ namespace NightLifeApp.Controllers.Api
         [HttpGet("getusers/{barId}")]
         public IActionResult GetUsersForBar(int barId)
         {
+            //TODO: Look here and see if this is causing Bar Details Page bug
             Bar bar = repo.GetBarById(barId);
             IEnumerable<NightLifeUser> users = bar.RSVPs.Select(rsvp => rsvp.NightLifeUser);
 
