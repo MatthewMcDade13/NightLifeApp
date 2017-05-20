@@ -111,8 +111,8 @@ namespace NightLifeApp
 
             app.UseFacebookAuthentication(new FacebookOptions()
             {
-                AppId = Configuration["Authentication:Facebook:AppId"],
-                AppSecret = Configuration["Authentication:Facebook:AppSecret"],
+                AppId = Environment.GetEnvironmentVariable("FacebookAppId"),
+                AppSecret = Environment.GetEnvironmentVariable("FacebookAppSecret"),
                 AutomaticChallenge = true,
                 AutomaticAuthenticate = true,
                 Scope = { "public_profile", "email" }
@@ -121,8 +121,8 @@ namespace NightLifeApp
 
             app.UseGoogleAuthentication(new GoogleOptions()
             {
-                ClientId = Configuration["Authentication:Google:ClientId"],
-                ClientSecret = Configuration["Authentication:Google:ClientSecret"],
+                ClientId = Environment.GetEnvironmentVariable("GoogleClientId"),
+                ClientSecret = Environment.GetEnvironmentVariable("GoogleClientSecret"),
                 AutomaticAuthenticate = true,
                 AutomaticChallenge = true
             });

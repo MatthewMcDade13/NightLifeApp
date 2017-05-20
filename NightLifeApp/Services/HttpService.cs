@@ -18,8 +18,8 @@ namespace NightLifeApp.Services
         public HttpService(IConfiguration config)
         {
             this.config = config;
-            googlePlacesKey = config["Api:Google:PlacesKey"];
-            googleGeoKey = config["Api:Google:GeoKey"];
+            googlePlacesKey = Environment.GetEnvironmentVariable("GooglePlacesKey");
+            googleGeoKey = Environment.GetEnvironmentVariable("GoogleGeoKey");
         }
 
         public async Task<Byte[]> GetBarPhoto(string photoReference)
